@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Flashcard {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  character String
+  pinyin    String
+  meaning   String
+  
+  tags      Tag[]
+  decks     Deck[]
+}
+
+model Tag {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  createdAt DateTime   @default(now())
+  flashcards Flashcard[]
+}
+
+model Deck {
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  flashcards  Flashcard[]
+}
+
+model StudySession {
+  id        String   @id @default(cuid())
+  deckId    String
+  startedAt DateTime @default(now())
+  endedAt   DateTime?
+  
+  correct   Int      @default(0)
+  incorrect Int      @default(0)
+  
+  studyMode String   // "normal", "reverse", "meaningOnly"
+}
