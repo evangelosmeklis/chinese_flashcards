@@ -103,6 +103,18 @@ yarn dev
 - Decks: Collections of flashcards for studying
 - StudySessions: Records of study sessions
 
+## Screenshots
+
+### Flashcards Management
+![Flashcards Page](/public/fkashcards.png)
+
+### Deck Management
+![Deck Management](/public/deck.png)
+
+### Study Mode
+![Study Mode](/public/studying.png)
+![Study Results](/public/studying_two.png)
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
