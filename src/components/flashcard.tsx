@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -20,6 +20,11 @@ export function Flashcard({
   onResult 
 }: FlashcardProps) {
   const [flipped, setFlipped] = useState(false);
+  
+  // Reset flipped state when the id changes (new card)
+  useEffect(() => {
+    setFlipped(false);
+  }, [id]);
   
   // Determine what to show on front and back based on mode
   let frontContent: React.ReactNode;
@@ -82,19 +87,13 @@ export function Flashcard({
         <div className="flex gap-4">
           <Button 
             variant="destructive" 
-            onClick={() => {
-              onResult(false);
-              setFlipped(false);
-            }}
+            onClick={() => onResult(false)}
           >
             Incorrect
           </Button>
           <Button 
             variant="default" 
-            onClick={() => {
-              onResult(true);
-              setFlipped(false);
-            }}
+            onClick={() => onResult(true)}
           >
             Correct
           </Button>

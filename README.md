@@ -14,6 +14,18 @@ A modern web application for learning Chinese characters using flashcards. This 
   - Meaning Only: Meaning → Character & Pinyin
 - Track study progress and performance
 
+## Screenshots
+
+### Flashcards Management
+![Flashcards Page](/public/fkashcards.png)
+
+### Deck Management
+![Deck Management](/public/deck.png)
+
+### Study Mode
+![Study Mode](/public/studying.png)
+![Study Results](/public/studying_two.png)
+
 ## Getting Started
 
 ### Prerequisites
@@ -103,17 +115,6 @@ yarn dev
 - Decks: Collections of flashcards for studying
 - StudySessions: Records of study sessions
 
-## Screenshots
-
-### Flashcards Management
-![Flashcards Page](/public/fkashcards.png)
-
-### Deck Management
-![Deck Management](/public/deck.png)
-
-### Study Mode
-![Study Mode](/public/studying.png)
-![Study Results](/public/studying_two.png)
 
 ## License
 

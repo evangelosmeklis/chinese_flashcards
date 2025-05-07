@@ -32,6 +32,8 @@ export function StudySession({ deck, flashcards, onComplete }: StudySessionProps
   const [studyMode, setStudyMode] = useState<StudyMode>('normal');
   const [isComplete, setIsComplete] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showCard, setShowCard] = useState(true);
 
   // Initialize on component mount
   useEffect(() => {
@@ -67,10 +69,23 @@ export function StudySession({ deck, flashcards, onComplete }: StudySessionProps
       setIncorrectCount(prev => prev + 1);
     }
 
-    // Move to next card
+    // If there are more cards, hide current card, wait, then show next card
     if (currentIndex < shuffledCards.length - 1) {
-      setCurrentIndex(prev => prev + 1);
+      setIsTransitioning(true);
+      setShowCard(false);
+      
+      // Wait briefly before showing the next card
+      setTimeout(() => {
+        setCurrentIndex(prev => prev + 1);
+        
+        // Wait a bit more before showing the new card to ensure it's in the front state
+        setTimeout(() => {
+          setShowCard(true);
+          setIsTransitioning(false);
+        }, 50);
+      }, 200);
     } else {
+      // Session is complete
       setIsComplete(true);
     }
   };
@@ -93,6 +108,7 @@ export function StudySession({ deck, flashcards, onComplete }: StudySessionProps
     setCorrectCount(0);
     setIncorrectCount(0);
     setIsComplete(false);
+    setShowCard(true);
   };
 
   // Helper function to set the study mode directly
@@ -161,15 +177,21 @@ export function StudySession({ deck, flashcards, onComplete }: StudySessionProps
       </Card>
 
       {!isComplete && shuffledCards.length > 0 ? (
-        <div className="flex justify-center">
-          <Flashcard
-            id={shuffledCards[currentIndex].id}
-            character={shuffledCards[currentIndex].character}
-            pinyin={shuffledCards[currentIndex].pinyin}
-            meaning={shuffledCards[currentIndex].meaning}
-            mode={studyMode}
-            onResult={handleCardResult}
-          />
+        <div className="flex justify-center min-h-[400px]">
+          {isTransitioning ? (
+            <div className="flex items-center justify-center w-full max-w-lg">
+              <div className="text-gray-500">Loading next card...</div>
+            </div>
+          ) : showCard ? (
+            <Flashcard
+              id={shuffledCards[currentIndex].id}
+              character={shuffledCards[currentIndex].character}
+              pinyin={shuffledCards[currentIndex].pinyin}
+              meaning={shuffledCards[currentIndex].meaning}
+              mode={studyMode}
+              onResult={handleCardResult}
+            />
+          ) : null}
         </div>
       ) : (
         <Card>
