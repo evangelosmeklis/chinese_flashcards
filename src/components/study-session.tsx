@@ -33,18 +33,32 @@ export function StudySession({ deck, flashcards, onComplete }: StudySessionProps
   const [isComplete, setIsComplete] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Shuffle cards on initial load or when study mode changes
+  // Initialize on component mount
   useEffect(() => {
+    // Set mode to normal and shuffle cards on mount
+    setStudyMode('normal');
+    localStorage.setItem('studyMode', 'normal');
+    
+    const shuffled = [...flashcards].sort(() => Math.random() - 0.5);
+    setShuffledCards(shuffled);
+  }, [flashcards]);
+
+  // When study mode changes, reset and reshuffle
+  useEffect(() => {
+    // Don't run this on first render
+    if (shuffledCards.length === 0) return;
+    
+    // Save the mode to localStorage
+    localStorage.setItem('studyMode', studyMode);
+    
+    // Reset and reshuffle
     const shuffled = [...flashcards].sort(() => Math.random() - 0.5);
     setShuffledCards(shuffled);
     setCurrentIndex(0);
     setCorrectCount(0);
     setIncorrectCount(0);
     setIsComplete(false);
-    
-    // Save study mode to localStorage for the API
-    localStorage.setItem('studyMode', studyMode);
-  }, [flashcards, studyMode]);
+  }, [studyMode]);
 
   const handleCardResult = (correct: boolean) => {
     if (correct) {
@@ -81,7 +95,9 @@ export function StudySession({ deck, flashcards, onComplete }: StudySessionProps
     setIsComplete(false);
   };
 
-  const changeMode = (mode: StudyMode) => {
+  // Helper function to set the study mode directly
+  const setModeDirectly = (mode: StudyMode) => {
+    console.log(`Setting mode to: ${mode}`);
     setStudyMode(mode);
   };
 
@@ -98,28 +114,34 @@ export function StudySession({ deck, flashcards, onComplete }: StudySessionProps
             </p>
           </div>
           
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-2">
             <Button 
               variant={studyMode === 'normal' ? 'default' : 'outline'}
-              onClick={() => changeMode('normal')}
+              onClick={() => setModeDirectly('normal')}
               disabled={isSubmitting}
             >
-              Normal Mode (Character → Meaning)
+              {studyMode === 'normal' ? '✓ ' : ''}Normal Mode
             </Button>
             <Button 
               variant={studyMode === 'reverse' ? 'default' : 'outline'}
-              onClick={() => changeMode('reverse')}
+              onClick={() => setModeDirectly('reverse')}
               disabled={isSubmitting}
             >
-              Reverse Mode (Meaning → Character)
+              {studyMode === 'reverse' ? '✓ ' : ''}Reverse Mode
             </Button>
             <Button 
               variant={studyMode === 'meaningOnly' ? 'default' : 'outline'}
-              onClick={() => changeMode('meaningOnly')}
+              onClick={() => setModeDirectly('meaningOnly')}
               disabled={isSubmitting}
             >
-              Meaning Only (Meaning → Character+Pinyin)
+              {studyMode === 'meaningOnly' ? '✓ ' : ''}Meaning Only
             </Button>
+          </div>
+          
+          <div className="text-sm text-gray-500 mb-4">
+            {studyMode === 'normal' && 'Shows Chinese character first, guess the meaning.'}
+            {studyMode === 'reverse' && 'Shows meaning first, guess the Chinese character.'}
+            {studyMode === 'meaningOnly' && 'Shows meaning only, guess both character and pronunciation.'}
           </div>
           
           <div className="flex justify-between mb-4">

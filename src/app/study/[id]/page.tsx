@@ -66,7 +66,7 @@ export default function StudyPage() {
         studyMode,
       });
       toast.success('Study session saved successfully');
-      router.push('/decks');
+      router.push(`/decks/${deckId}/history`);
       return Promise.resolve();
     } catch (err) {
       console.error('Error saving study session:', err);

@@ -38,12 +38,14 @@ model Deck {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  flashcards Flashcard[]
+  flashcards    Flashcard[]
+  studySessions StudySession[]
 }
 
 model StudySession {
   id        String    @id @default(cuid())
   deckId    String
+  deck      Deck      @relation(fields: [deckId], references: [id])
   startedAt DateTime  @default(now())
   endedAt   DateTime?
 

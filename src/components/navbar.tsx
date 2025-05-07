@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { name: 'Flashcards', href: '/flashcards' },
   { name: 'Decks', href: '/decks' },
   { name: 'Study', href: '/study' },
+  { name: 'Sessions', href: '/study-sessions' },
 ];
 
 export function Navbar() {

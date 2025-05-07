@@ -57,19 +57,26 @@ export function Flashcard({
 
   return (
     <div className="flex flex-col items-center gap-6 w-full max-w-lg">
-      <Card 
-        className={`w-full h-80 flex items-center justify-center cursor-pointer perspective-1000 transition-transform duration-500 ${flipped ? 'rotate-y-180' : ''}`}
-        onClick={() => setFlipped(!flipped)}
-      >
-        <CardContent className="w-full h-full flex items-center justify-center">
-          <div className={`absolute backface-hidden transition-opacity duration-500 ${flipped ? 'opacity-0' : 'opacity-100'}`}>
-            {frontContent}
-          </div>
-          <div className={`absolute backface-hidden rotate-y-180 transition-opacity duration-500 ${flipped ? 'opacity-100' : 'opacity-0'}`}>
-            {backContent}
-          </div>
-        </CardContent>
-      </Card>
+      <div className="w-full perspective-1000">
+        <div 
+          className={`relative w-full h-80 cursor-pointer transition-transform duration-500 transform-style-3d ${flipped ? 'rotate-y-180' : ''}`}
+          onClick={() => setFlipped(!flipped)}
+        >
+          {/* Front side */}
+          <Card className="absolute w-full h-full backface-hidden">
+            <CardContent className="flex items-center justify-center h-full">
+              {frontContent}
+            </CardContent>
+          </Card>
+          
+          {/* Back side */}
+          <Card className="absolute w-full h-full backface-hidden rotate-y-180">
+            <CardContent className="flex items-center justify-center h-full">
+              {backContent}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
       
       {flipped && (
         <div className="flex gap-4">

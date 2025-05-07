@@ -135,6 +135,9 @@ export default function DeckPage() {
             <Link href="/decks">
               <Button variant="outline">Back to Decks</Button>
             </Link>
+            <Link href={`/decks/${deckId}/history`}>
+              <Button variant="outline">Study History</Button>
+            </Link>
             <Link href={`/study/${deckId}`}>
               <Button>Study Deck</Button>
             </Link>

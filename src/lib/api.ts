@@ -173,4 +173,20 @@ export async function createStudySession(data: {
     body: JSON.stringify(data),
   });
   return handleResponse<any>(response);
+}
+
+/**
+ * Get study sessions
+ */
+export async function getStudySessions() {
+  const response = await fetch('/api/study-sessions');
+  return handleResponse<any[]>(response);
+}
+
+/**
+ * Get study sessions for a specific deck
+ */
+export async function getDeckStudySessions(deckId: string) {
+  const response = await fetch(`/api/decks/${deckId}/study-sessions`);
+  return handleResponse<any[]>(response);
 } 

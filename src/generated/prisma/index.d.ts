@@ -1214,10 +1214,12 @@ export namespace Prisma {
 
   export type DeckCountOutputType = {
     flashcards: number
+    studySessions: number
   }
 
   export type DeckCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     flashcards?: boolean | DeckCountOutputTypeCountFlashcardsArgs
+    studySessions?: boolean | DeckCountOutputTypeCountStudySessionsArgs
   }
 
   // Custom InputTypes
@@ -1236,6 +1238,13 @@ export namespace Prisma {
    */
   export type DeckCountOutputTypeCountFlashcardsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: FlashcardWhereInput
+  }
+
+  /**
+   * DeckCountOutputType without action
+   */
+  export type DeckCountOutputTypeCountStudySessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: StudySessionWhereInput
   }
 
 
@@ -3559,6 +3568,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     flashcards?: boolean | Deck$flashcardsArgs<ExtArgs>
+    studySessions?: boolean | Deck$studySessionsArgs<ExtArgs>
     _count?: boolean | DeckCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["deck"]>
 
@@ -3589,6 +3599,7 @@ export namespace Prisma {
   export type DeckOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["deck"]>
   export type DeckInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     flashcards?: boolean | Deck$flashcardsArgs<ExtArgs>
+    studySessions?: boolean | Deck$studySessionsArgs<ExtArgs>
     _count?: boolean | DeckCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type DeckIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3598,6 +3609,7 @@ export namespace Prisma {
     name: "Deck"
     objects: {
       flashcards: Prisma.$FlashcardPayload<ExtArgs>[]
+      studySessions: Prisma.$StudySessionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -4000,6 +4012,7 @@ export namespace Prisma {
   export interface Prisma__DeckClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     flashcards<T extends Deck$flashcardsArgs<ExtArgs> = {}>(args?: Subset<T, Deck$flashcardsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FlashcardPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    studySessions<T extends Deck$studySessionsArgs<ExtArgs> = {}>(args?: Subset<T, Deck$studySessionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$StudySessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4444,6 +4457,30 @@ export namespace Prisma {
   }
 
   /**
+   * Deck.studySessions
+   */
+  export type Deck$studySessionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the StudySession
+     */
+    select?: StudySessionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the StudySession
+     */
+    omit?: StudySessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionInclude<ExtArgs> | null
+    where?: StudySessionWhereInput
+    orderBy?: StudySessionOrderByWithRelationInput | StudySessionOrderByWithRelationInput[]
+    cursor?: StudySessionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: StudySessionScalarFieldEnum | StudySessionScalarFieldEnum[]
+  }
+
+  /**
    * Deck without action
    */
   export type DeckDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4680,6 +4717,7 @@ export namespace Prisma {
     correct?: boolean
     incorrect?: boolean
     studyMode?: boolean
+    deck?: boolean | DeckDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studySession"]>
 
   export type StudySessionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4690,6 +4728,7 @@ export namespace Prisma {
     correct?: boolean
     incorrect?: boolean
     studyMode?: boolean
+    deck?: boolean | DeckDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studySession"]>
 
   export type StudySessionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -4700,6 +4739,7 @@ export namespace Prisma {
     correct?: boolean
     incorrect?: boolean
     studyMode?: boolean
+    deck?: boolean | DeckDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["studySession"]>
 
   export type StudySessionSelectScalar = {
@@ -4713,10 +4753,21 @@ export namespace Prisma {
   }
 
   export type StudySessionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "deckId" | "startedAt" | "endedAt" | "correct" | "incorrect" | "studyMode", ExtArgs["result"]["studySession"]>
+  export type StudySessionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    deck?: boolean | DeckDefaultArgs<ExtArgs>
+  }
+  export type StudySessionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    deck?: boolean | DeckDefaultArgs<ExtArgs>
+  }
+  export type StudySessionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    deck?: boolean | DeckDefaultArgs<ExtArgs>
+  }
 
   export type $StudySessionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "StudySession"
-    objects: {}
+    objects: {
+      deck: Prisma.$DeckPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       deckId: string
@@ -5119,6 +5170,7 @@ export namespace Prisma {
    */
   export interface Prisma__StudySessionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    deck<T extends DeckDefaultArgs<ExtArgs> = {}>(args?: Subset<T, DeckDefaultArgs<ExtArgs>>): Prisma__DeckClient<$Result.GetResult<Prisma.$DeckPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5172,6 +5224,10 @@ export namespace Prisma {
      */
     omit?: StudySessionOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionInclude<ExtArgs> | null
+    /**
      * Filter, which StudySession to fetch.
      */
     where: StudySessionWhereUniqueInput
@@ -5190,6 +5246,10 @@ export namespace Prisma {
      */
     omit?: StudySessionOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionInclude<ExtArgs> | null
+    /**
      * Filter, which StudySession to fetch.
      */
     where: StudySessionWhereUniqueInput
@@ -5207,6 +5267,10 @@ export namespace Prisma {
      * Omit specific fields from the StudySession
      */
     omit?: StudySessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionInclude<ExtArgs> | null
     /**
      * Filter, which StudySession to fetch.
      */
@@ -5256,6 +5320,10 @@ export namespace Prisma {
      */
     omit?: StudySessionOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionInclude<ExtArgs> | null
+    /**
      * Filter, which StudySession to fetch.
      */
     where?: StudySessionWhereInput
@@ -5304,6 +5372,10 @@ export namespace Prisma {
      */
     omit?: StudySessionOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionInclude<ExtArgs> | null
+    /**
      * Filter, which StudySessions to fetch.
      */
     where?: StudySessionWhereInput
@@ -5347,6 +5419,10 @@ export namespace Prisma {
      */
     omit?: StudySessionOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionInclude<ExtArgs> | null
+    /**
      * The data needed to create a StudySession.
      */
     data: XOR<StudySessionCreateInput, StudySessionUncheckedCreateInput>
@@ -5378,6 +5454,10 @@ export namespace Prisma {
      * The data used to create many StudySessions.
      */
     data: StudySessionCreateManyInput | StudySessionCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionIncludeCreateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5392,6 +5472,10 @@ export namespace Prisma {
      * Omit specific fields from the StudySession
      */
     omit?: StudySessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionInclude<ExtArgs> | null
     /**
      * The data needed to update a StudySession.
      */
@@ -5444,6 +5528,10 @@ export namespace Prisma {
      * Limit how many StudySessions to update.
      */
     limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionIncludeUpdateManyAndReturn<ExtArgs> | null
   }
 
   /**
@@ -5458,6 +5546,10 @@ export namespace Prisma {
      * Omit specific fields from the StudySession
      */
     omit?: StudySessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionInclude<ExtArgs> | null
     /**
      * The filter to search for the StudySession to update in case it exists.
      */
@@ -5484,6 +5576,10 @@ export namespace Prisma {
      * Omit specific fields from the StudySession
      */
     omit?: StudySessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionInclude<ExtArgs> | null
     /**
      * Filter which StudySession to delete.
      */
@@ -5516,6 +5612,10 @@ export namespace Prisma {
      * Omit specific fields from the StudySession
      */
     omit?: StudySessionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: StudySessionInclude<ExtArgs> | null
   }
 
 
@@ -5745,6 +5845,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Deck"> | Date | string
     updatedAt?: DateTimeFilter<"Deck"> | Date | string
     flashcards?: FlashcardListRelationFilter
+    studySessions?: StudySessionListRelationFilter
   }
 
   export type DeckOrderByWithRelationInput = {
@@ -5754,6 +5855,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     flashcards?: FlashcardOrderByRelationAggregateInput
+    studySessions?: StudySessionOrderByRelationAggregateInput
   }
 
   export type DeckWhereUniqueInput = Prisma.AtLeast<{
@@ -5766,6 +5868,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Deck"> | Date | string
     updatedAt?: DateTimeFilter<"Deck"> | Date | string
     flashcards?: FlashcardListRelationFilter
+    studySessions?: StudySessionListRelationFilter
   }, "id">
 
   export type DeckOrderByWithAggregationInput = {
@@ -5801,6 +5904,7 @@ export namespace Prisma {
     correct?: IntFilter<"StudySession"> | number
     incorrect?: IntFilter<"StudySession"> | number
     studyMode?: StringFilter<"StudySession"> | string
+    deck?: XOR<DeckScalarRelationFilter, DeckWhereInput>
   }
 
   export type StudySessionOrderByWithRelationInput = {
@@ -5811,6 +5915,7 @@ export namespace Prisma {
     correct?: SortOrder
     incorrect?: SortOrder
     studyMode?: SortOrder
+    deck?: DeckOrderByWithRelationInput
   }
 
   export type StudySessionWhereUniqueInput = Prisma.AtLeast<{
@@ -5824,6 +5929,7 @@ export namespace Prisma {
     correct?: IntFilter<"StudySession"> | number
     incorrect?: IntFilter<"StudySession"> | number
     studyMode?: StringFilter<"StudySession"> | string
+    deck?: XOR<DeckScalarRelationFilter, DeckWhereInput>
   }, "id">
 
   export type StudySessionOrderByWithAggregationInput = {
@@ -5978,6 +6084,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     flashcards?: FlashcardCreateNestedManyWithoutDecksInput
+    studySessions?: StudySessionCreateNestedManyWithoutDeckInput
   }
 
   export type DeckUncheckedCreateInput = {
@@ -5987,6 +6094,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     flashcards?: FlashcardUncheckedCreateNestedManyWithoutDecksInput
+    studySessions?: StudySessionUncheckedCreateNestedManyWithoutDeckInput
   }
 
   export type DeckUpdateInput = {
@@ -5996,6 +6104,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flashcards?: FlashcardUpdateManyWithoutDecksNestedInput
+    studySessions?: StudySessionUpdateManyWithoutDeckNestedInput
   }
 
   export type DeckUncheckedUpdateInput = {
@@ -6005,6 +6114,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     flashcards?: FlashcardUncheckedUpdateManyWithoutDecksNestedInput
+    studySessions?: StudySessionUncheckedUpdateManyWithoutDeckNestedInput
   }
 
   export type DeckCreateManyInput = {
@@ -6033,12 +6143,12 @@ export namespace Prisma {
 
   export type StudySessionCreateInput = {
     id?: string
-    deckId: string
     startedAt?: Date | string
     endedAt?: Date | string | null
     correct?: number
     incorrect?: number
     studyMode: string
+    deck: DeckCreateNestedOneWithoutStudySessionsInput
   }
 
   export type StudySessionUncheckedCreateInput = {
@@ -6053,12 +6163,12 @@ export namespace Prisma {
 
   export type StudySessionUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    deckId?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     correct?: IntFieldUpdateOperationsInput | number
     incorrect?: IntFieldUpdateOperationsInput | number
     studyMode?: StringFieldUpdateOperationsInput | string
+    deck?: DeckUpdateOneRequiredWithoutStudySessionsNestedInput
   }
 
   export type StudySessionUncheckedUpdateInput = {
@@ -6083,7 +6193,6 @@ export namespace Prisma {
 
   export type StudySessionUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    deckId?: StringFieldUpdateOperationsInput | string
     startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     correct?: IntFieldUpdateOperationsInput | number
@@ -6246,9 +6355,19 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type StudySessionListRelationFilter = {
+    every?: StudySessionWhereInput
+    some?: StudySessionWhereInput
+    none?: StudySessionWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
+  }
+
+  export type StudySessionOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type DeckCountOrderByAggregateInput = {
@@ -6312,6 +6431,11 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type DeckScalarRelationFilter = {
+    is?: DeckWhereInput
+    isNot?: DeckWhereInput
   }
 
   export type StudySessionCountOrderByAggregateInput = {
@@ -6512,10 +6636,24 @@ export namespace Prisma {
     connect?: FlashcardWhereUniqueInput | FlashcardWhereUniqueInput[]
   }
 
+  export type StudySessionCreateNestedManyWithoutDeckInput = {
+    create?: XOR<StudySessionCreateWithoutDeckInput, StudySessionUncheckedCreateWithoutDeckInput> | StudySessionCreateWithoutDeckInput[] | StudySessionUncheckedCreateWithoutDeckInput[]
+    connectOrCreate?: StudySessionCreateOrConnectWithoutDeckInput | StudySessionCreateOrConnectWithoutDeckInput[]
+    createMany?: StudySessionCreateManyDeckInputEnvelope
+    connect?: StudySessionWhereUniqueInput | StudySessionWhereUniqueInput[]
+  }
+
   export type FlashcardUncheckedCreateNestedManyWithoutDecksInput = {
     create?: XOR<FlashcardCreateWithoutDecksInput, FlashcardUncheckedCreateWithoutDecksInput> | FlashcardCreateWithoutDecksInput[] | FlashcardUncheckedCreateWithoutDecksInput[]
     connectOrCreate?: FlashcardCreateOrConnectWithoutDecksInput | FlashcardCreateOrConnectWithoutDecksInput[]
     connect?: FlashcardWhereUniqueInput | FlashcardWhereUniqueInput[]
+  }
+
+  export type StudySessionUncheckedCreateNestedManyWithoutDeckInput = {
+    create?: XOR<StudySessionCreateWithoutDeckInput, StudySessionUncheckedCreateWithoutDeckInput> | StudySessionCreateWithoutDeckInput[] | StudySessionUncheckedCreateWithoutDeckInput[]
+    connectOrCreate?: StudySessionCreateOrConnectWithoutDeckInput | StudySessionCreateOrConnectWithoutDeckInput[]
+    createMany?: StudySessionCreateManyDeckInputEnvelope
+    connect?: StudySessionWhereUniqueInput | StudySessionWhereUniqueInput[]
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -6535,6 +6673,20 @@ export namespace Prisma {
     deleteMany?: FlashcardScalarWhereInput | FlashcardScalarWhereInput[]
   }
 
+  export type StudySessionUpdateManyWithoutDeckNestedInput = {
+    create?: XOR<StudySessionCreateWithoutDeckInput, StudySessionUncheckedCreateWithoutDeckInput> | StudySessionCreateWithoutDeckInput[] | StudySessionUncheckedCreateWithoutDeckInput[]
+    connectOrCreate?: StudySessionCreateOrConnectWithoutDeckInput | StudySessionCreateOrConnectWithoutDeckInput[]
+    upsert?: StudySessionUpsertWithWhereUniqueWithoutDeckInput | StudySessionUpsertWithWhereUniqueWithoutDeckInput[]
+    createMany?: StudySessionCreateManyDeckInputEnvelope
+    set?: StudySessionWhereUniqueInput | StudySessionWhereUniqueInput[]
+    disconnect?: StudySessionWhereUniqueInput | StudySessionWhereUniqueInput[]
+    delete?: StudySessionWhereUniqueInput | StudySessionWhereUniqueInput[]
+    connect?: StudySessionWhereUniqueInput | StudySessionWhereUniqueInput[]
+    update?: StudySessionUpdateWithWhereUniqueWithoutDeckInput | StudySessionUpdateWithWhereUniqueWithoutDeckInput[]
+    updateMany?: StudySessionUpdateManyWithWhereWithoutDeckInput | StudySessionUpdateManyWithWhereWithoutDeckInput[]
+    deleteMany?: StudySessionScalarWhereInput | StudySessionScalarWhereInput[]
+  }
+
   export type FlashcardUncheckedUpdateManyWithoutDecksNestedInput = {
     create?: XOR<FlashcardCreateWithoutDecksInput, FlashcardUncheckedCreateWithoutDecksInput> | FlashcardCreateWithoutDecksInput[] | FlashcardUncheckedCreateWithoutDecksInput[]
     connectOrCreate?: FlashcardCreateOrConnectWithoutDecksInput | FlashcardCreateOrConnectWithoutDecksInput[]
@@ -6548,6 +6700,26 @@ export namespace Prisma {
     deleteMany?: FlashcardScalarWhereInput | FlashcardScalarWhereInput[]
   }
 
+  export type StudySessionUncheckedUpdateManyWithoutDeckNestedInput = {
+    create?: XOR<StudySessionCreateWithoutDeckInput, StudySessionUncheckedCreateWithoutDeckInput> | StudySessionCreateWithoutDeckInput[] | StudySessionUncheckedCreateWithoutDeckInput[]
+    connectOrCreate?: StudySessionCreateOrConnectWithoutDeckInput | StudySessionCreateOrConnectWithoutDeckInput[]
+    upsert?: StudySessionUpsertWithWhereUniqueWithoutDeckInput | StudySessionUpsertWithWhereUniqueWithoutDeckInput[]
+    createMany?: StudySessionCreateManyDeckInputEnvelope
+    set?: StudySessionWhereUniqueInput | StudySessionWhereUniqueInput[]
+    disconnect?: StudySessionWhereUniqueInput | StudySessionWhereUniqueInput[]
+    delete?: StudySessionWhereUniqueInput | StudySessionWhereUniqueInput[]
+    connect?: StudySessionWhereUniqueInput | StudySessionWhereUniqueInput[]
+    update?: StudySessionUpdateWithWhereUniqueWithoutDeckInput | StudySessionUpdateWithWhereUniqueWithoutDeckInput[]
+    updateMany?: StudySessionUpdateManyWithWhereWithoutDeckInput | StudySessionUpdateManyWithWhereWithoutDeckInput[]
+    deleteMany?: StudySessionScalarWhereInput | StudySessionScalarWhereInput[]
+  }
+
+  export type DeckCreateNestedOneWithoutStudySessionsInput = {
+    create?: XOR<DeckCreateWithoutStudySessionsInput, DeckUncheckedCreateWithoutStudySessionsInput>
+    connectOrCreate?: DeckCreateOrConnectWithoutStudySessionsInput
+    connect?: DeckWhereUniqueInput
+  }
+
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
   }
@@ -6558,6 +6730,14 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
+  }
+
+  export type DeckUpdateOneRequiredWithoutStudySessionsNestedInput = {
+    create?: XOR<DeckCreateWithoutStudySessionsInput, DeckUncheckedCreateWithoutStudySessionsInput>
+    connectOrCreate?: DeckCreateOrConnectWithoutStudySessionsInput
+    upsert?: DeckUpsertWithoutStudySessionsInput
+    connect?: DeckWhereUniqueInput
+    update?: XOR<XOR<DeckUpdateToOneWithWhereWithoutStudySessionsInput, DeckUpdateWithoutStudySessionsInput>, DeckUncheckedUpdateWithoutStudySessionsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -6744,6 +6924,7 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studySessions?: StudySessionCreateNestedManyWithoutDeckInput
   }
 
   export type DeckUncheckedCreateWithoutFlashcardsInput = {
@@ -6752,6 +6933,7 @@ export namespace Prisma {
     description?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    studySessions?: StudySessionUncheckedCreateNestedManyWithoutDeckInput
   }
 
   export type DeckCreateOrConnectWithoutFlashcardsInput = {
@@ -6889,6 +7071,33 @@ export namespace Prisma {
     create: XOR<FlashcardCreateWithoutDecksInput, FlashcardUncheckedCreateWithoutDecksInput>
   }
 
+  export type StudySessionCreateWithoutDeckInput = {
+    id?: string
+    startedAt?: Date | string
+    endedAt?: Date | string | null
+    correct?: number
+    incorrect?: number
+    studyMode: string
+  }
+
+  export type StudySessionUncheckedCreateWithoutDeckInput = {
+    id?: string
+    startedAt?: Date | string
+    endedAt?: Date | string | null
+    correct?: number
+    incorrect?: number
+    studyMode: string
+  }
+
+  export type StudySessionCreateOrConnectWithoutDeckInput = {
+    where: StudySessionWhereUniqueInput
+    create: XOR<StudySessionCreateWithoutDeckInput, StudySessionUncheckedCreateWithoutDeckInput>
+  }
+
+  export type StudySessionCreateManyDeckInputEnvelope = {
+    data: StudySessionCreateManyDeckInput | StudySessionCreateManyDeckInput[]
+  }
+
   export type FlashcardUpsertWithWhereUniqueWithoutDecksInput = {
     where: FlashcardWhereUniqueInput
     update: XOR<FlashcardUpdateWithoutDecksInput, FlashcardUncheckedUpdateWithoutDecksInput>
@@ -6903,6 +7112,87 @@ export namespace Prisma {
   export type FlashcardUpdateManyWithWhereWithoutDecksInput = {
     where: FlashcardScalarWhereInput
     data: XOR<FlashcardUpdateManyMutationInput, FlashcardUncheckedUpdateManyWithoutDecksInput>
+  }
+
+  export type StudySessionUpsertWithWhereUniqueWithoutDeckInput = {
+    where: StudySessionWhereUniqueInput
+    update: XOR<StudySessionUpdateWithoutDeckInput, StudySessionUncheckedUpdateWithoutDeckInput>
+    create: XOR<StudySessionCreateWithoutDeckInput, StudySessionUncheckedCreateWithoutDeckInput>
+  }
+
+  export type StudySessionUpdateWithWhereUniqueWithoutDeckInput = {
+    where: StudySessionWhereUniqueInput
+    data: XOR<StudySessionUpdateWithoutDeckInput, StudySessionUncheckedUpdateWithoutDeckInput>
+  }
+
+  export type StudySessionUpdateManyWithWhereWithoutDeckInput = {
+    where: StudySessionScalarWhereInput
+    data: XOR<StudySessionUpdateManyMutationInput, StudySessionUncheckedUpdateManyWithoutDeckInput>
+  }
+
+  export type StudySessionScalarWhereInput = {
+    AND?: StudySessionScalarWhereInput | StudySessionScalarWhereInput[]
+    OR?: StudySessionScalarWhereInput[]
+    NOT?: StudySessionScalarWhereInput | StudySessionScalarWhereInput[]
+    id?: StringFilter<"StudySession"> | string
+    deckId?: StringFilter<"StudySession"> | string
+    startedAt?: DateTimeFilter<"StudySession"> | Date | string
+    endedAt?: DateTimeNullableFilter<"StudySession"> | Date | string | null
+    correct?: IntFilter<"StudySession"> | number
+    incorrect?: IntFilter<"StudySession"> | number
+    studyMode?: StringFilter<"StudySession"> | string
+  }
+
+  export type DeckCreateWithoutStudySessionsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    flashcards?: FlashcardCreateNestedManyWithoutDecksInput
+  }
+
+  export type DeckUncheckedCreateWithoutStudySessionsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    flashcards?: FlashcardUncheckedCreateNestedManyWithoutDecksInput
+  }
+
+  export type DeckCreateOrConnectWithoutStudySessionsInput = {
+    where: DeckWhereUniqueInput
+    create: XOR<DeckCreateWithoutStudySessionsInput, DeckUncheckedCreateWithoutStudySessionsInput>
+  }
+
+  export type DeckUpsertWithoutStudySessionsInput = {
+    update: XOR<DeckUpdateWithoutStudySessionsInput, DeckUncheckedUpdateWithoutStudySessionsInput>
+    create: XOR<DeckCreateWithoutStudySessionsInput, DeckUncheckedCreateWithoutStudySessionsInput>
+    where?: DeckWhereInput
+  }
+
+  export type DeckUpdateToOneWithWhereWithoutStudySessionsInput = {
+    where?: DeckWhereInput
+    data: XOR<DeckUpdateWithoutStudySessionsInput, DeckUncheckedUpdateWithoutStudySessionsInput>
+  }
+
+  export type DeckUpdateWithoutStudySessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flashcards?: FlashcardUpdateManyWithoutDecksNestedInput
+  }
+
+  export type DeckUncheckedUpdateWithoutStudySessionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flashcards?: FlashcardUncheckedUpdateManyWithoutDecksNestedInput
   }
 
   export type TagUpdateWithoutFlashcardsInput = {
@@ -6929,6 +7219,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studySessions?: StudySessionUpdateManyWithoutDeckNestedInput
   }
 
   export type DeckUncheckedUpdateWithoutFlashcardsInput = {
@@ -6937,6 +7228,7 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studySessions?: StudySessionUncheckedUpdateManyWithoutDeckNestedInput
   }
 
   export type DeckUncheckedUpdateManyWithoutFlashcardsInput = {
@@ -6976,6 +7268,15 @@ export namespace Prisma {
     meaning?: StringFieldUpdateOperationsInput | string
   }
 
+  export type StudySessionCreateManyDeckInput = {
+    id?: string
+    startedAt?: Date | string
+    endedAt?: Date | string | null
+    correct?: number
+    incorrect?: number
+    studyMode: string
+  }
+
   export type FlashcardUpdateWithoutDecksInput = {
     id?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -7003,6 +7304,33 @@ export namespace Prisma {
     character?: StringFieldUpdateOperationsInput | string
     pinyin?: StringFieldUpdateOperationsInput | string
     meaning?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type StudySessionUpdateWithoutDeckInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    correct?: IntFieldUpdateOperationsInput | number
+    incorrect?: IntFieldUpdateOperationsInput | number
+    studyMode?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type StudySessionUncheckedUpdateWithoutDeckInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    correct?: IntFieldUpdateOperationsInput | number
+    incorrect?: IntFieldUpdateOperationsInput | number
+    studyMode?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type StudySessionUncheckedUpdateManyWithoutDeckInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    correct?: IntFieldUpdateOperationsInput | number
+    incorrect?: IntFieldUpdateOperationsInput | number
+    studyMode?: StringFieldUpdateOperationsInput | string
   }
 
 

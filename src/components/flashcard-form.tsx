@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import toast from 'react-hot-toast';
 
 const flashcardSchema = z.object({
   character: z.string().min(1, 'Chinese character is required'),
@@ -17,17 +18,127 @@ type FlashcardFormValues = z.infer<typeof flashcardSchema>;
 interface FlashcardFormProps {
   onSubmit: (values: FlashcardFormValues) => Promise<void>;
   existingTags?: string[];
+  flashcard?: {
+    id: string;
+    character: string;
+    pinyin: string;
+    meaning: string;
+    tags: string[];
+  };
+  isEditing?: boolean;
+  onCancel?: () => void;
 }
 
-export function FlashcardForm({ onSubmit, existingTags = [] }: FlashcardFormProps) {
+const PinyinInput = ({ value, onChange }: { value: string, onChange: (value: string) => void }) => {
+  const [inputValue, setInputValue] = useState(value);
+  
+  useEffect(() => {
+    setInputValue(value);
+  }, [value]);
+  
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+    onChange(e.target.value);
+  };
+  
+  const addCharacter = (char: string) => {
+    const newValue = inputValue + char;
+    setInputValue(newValue);
+    onChange(newValue);
+  };
+  
+  const toneButtons = [
+    { vowel: 'a', chars: ['ā', 'á', 'ǎ', 'à'] },
+    { vowel: 'e', chars: ['ē', 'é', 'ě', 'è'] },
+    { vowel: 'i', chars: ['ī', 'í', 'ǐ', 'ì'] },
+    { vowel: 'o', chars: ['ō', 'ó', 'ǒ', 'ò'] },
+    { vowel: 'u', chars: ['ū', 'ú', 'ǔ', 'ù'] },
+    { vowel: 'ü', chars: ['ǖ', 'ǘ', 'ǚ', 'ǜ'] },
+  ];
+  
+  const helperChars = [
+    { symbol: 'ü', label: 'ü' },
+    { symbol: ' ', label: 'space' },
+    { symbol: '-', label: 'hyphen' },
+    { symbol: 'er', label: 'er' }
+  ];
+  
+  return (
+    <div className="space-y-2">
+      <label htmlFor="pinyin-input" className="text-sm font-medium">
+        Pinyin
+      </label>
+      <input
+        id="pinyin-input"
+        value={inputValue}
+        onChange={handleInputChange}
+        className="w-full p-2 border rounded-md"
+        placeholder="e.g. nǐ hǎo"
+      />
+      
+      <div className="mt-2">
+        <div className="flex items-center justify-between mb-1">
+          <p className="text-sm font-medium">Pinyin Tone Marks</p>
+          <span className="text-xs text-gray-500 italic">Click to add character</span>
+        </div>
+        <div className="flex flex-wrap gap-1">
+          {toneButtons.map(({ vowel, chars }) => (
+            <div key={vowel} className="flex flex-col items-center border rounded-md p-1 bg-gray-50">
+              <span className="text-xs text-gray-500">{vowel}</span>
+              <div className="flex gap-1">
+                {chars.map((char, index) => (
+                  <button
+                    key={char}
+                    type="button"
+                    onClick={() => addCharacter(char)}
+                    className="w-6 h-6 text-sm bg-white border rounded hover:bg-blue-50 flex items-center justify-center"
+                  >
+                    {char}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+          
+          <div className="flex flex-col items-center border rounded-md p-1 bg-gray-50">
+            <span className="text-xs text-gray-500">Other</span>
+            <div className="flex gap-1">
+              {helperChars.map(char => (
+                <button
+                  key={char.symbol}
+                  type="button"
+                  onClick={() => addCharacter(char.symbol)}
+                  className="px-2 h-6 text-sm bg-white border rounded hover:bg-blue-50 flex items-center justify-center whitespace-nowrap"
+                >
+                  {char.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export function FlashcardForm({ 
+  onSubmit, 
+  existingTags = [], 
+  flashcard, 
+  isEditing = false,
+  onCancel
+}: FlashcardFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [newTag, setNewTag] = useState('');
+  const [pinyinValue, setPinyinValue] = useState('');
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<FlashcardFormValues>({
     resolver: zodResolver(flashcardSchema),
@@ -39,14 +150,33 @@ export function FlashcardForm({ onSubmit, existingTags = [] }: FlashcardFormProp
     },
   });
 
+  // Initialize form with existing flashcard data when editing
+  useEffect(() => {
+    if (flashcard) {
+      setValue('character', flashcard.character);
+      setValue('pinyin', flashcard.pinyin);
+      setPinyinValue(flashcard.pinyin);
+      setValue('meaning', flashcard.meaning);
+      setSelectedTags(flashcard.tags || []);
+    }
+  }, [flashcard, setValue]);
+
+  // Update the form when pinyin changes in our custom component
+  useEffect(() => {
+    setValue('pinyin', pinyinValue, { shouldValidate: true });
+  }, [pinyinValue, setValue]);
+
   const handleFormSubmit = async (values: FlashcardFormValues) => {
     setIsSubmitting(true);
     try {
       // Add selected tags to the form data
       values.tags = selectedTags.join(',');
       await onSubmit(values);
-      reset();
-      setSelectedTags([]);
+      if (!isEditing) {
+        reset();
+        setPinyinValue('');
+        setSelectedTags([]);
+      }
     } catch (error) {
       console.error('Error submitting flashcard:', error);
     } finally {
@@ -74,7 +204,7 @@ export function FlashcardForm({ onSubmit, existingTags = [] }: FlashcardFormProp
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
-        <CardTitle>Add New Flashcard</CardTitle>
+        <CardTitle>{isEditing ? 'Edit Flashcard' : 'Add New Flashcard'}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
@@ -93,20 +223,14 @@ export function FlashcardForm({ onSubmit, existingTags = [] }: FlashcardFormProp
             )}
           </div>
 
-          <div className="space-y-2">
-            <label htmlFor="pinyin" className="text-sm font-medium">
-              Pinyin
-            </label>
-            <input
-              id="pinyin"
-              {...register('pinyin')}
-              className="w-full p-2 border rounded-md"
-              placeholder="e.g. nǐ hǎo"
-            />
-            {errors.pinyin && (
-              <p className="text-sm text-red-500">{errors.pinyin.message}</p>
-            )}
-          </div>
+          {/* Custom Pinyin Input Component */}
+          <PinyinInput 
+            value={pinyinValue} 
+            onChange={setPinyinValue} 
+          />
+          {errors.pinyin && (
+            <p className="text-sm text-red-500">{errors.pinyin.message}</p>
+          )}
 
           <div className="space-y-2">
             <label htmlFor="meaning" className="text-sm font-medium">
@@ -178,9 +302,18 @@ export function FlashcardForm({ onSubmit, existingTags = [] }: FlashcardFormProp
             )}
           </div>
 
-          <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? 'Adding...' : 'Add Flashcard'}
-          </Button>
+          <div className="flex gap-2">
+            {isEditing && onCancel && (
+              <Button type="button" variant="outline" className="flex-1" onClick={onCancel}>
+                Cancel
+              </Button>
+            )}
+            <Button type="submit" className="flex-1" disabled={isSubmitting}>
+              {isSubmitting 
+                ? (isEditing ? 'Saving...' : 'Adding...') 
+                : (isEditing ? 'Save Changes' : 'Add Flashcard')}
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>
