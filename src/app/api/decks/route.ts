@@ -3,7 +3,9 @@ import { db } from '@/lib/db';
 
 // GET /api/decks - Get all decks
 export async function GET() {
+  console.log('GET /api/decks - Handler called');
   try {
+    console.log('GET /api/decks - Attempting to query database');
     const decks = await db.deck.findMany({
       include: {
         flashcards: {
@@ -17,6 +19,8 @@ export async function GET() {
       },
     });
 
+    console.log(`GET /api/decks - Found ${decks.length} decks`);
+
     // Format the response to include the count of flashcards
     const formattedDecks = decks.map((deck: any) => ({
       id: deck.id,
@@ -27,6 +31,7 @@ export async function GET() {
       cardCount: deck.flashcards.length,
     }));
 
+    console.log('GET /api/decks - Sending response');
     return NextResponse.json(formattedDecks);
   } catch (error) {
     console.error('Error fetching decks:', error);
