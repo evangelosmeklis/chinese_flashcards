@@ -1,4 +1,4 @@
-# Chinese Flashcards App
+# HanziFive - Chinese Flashcards App
 
 A modern web application for learning Chinese characters using flashcards. This app allows you to create, organize, and study Chinese characters with their pinyin pronunciation and English meaning.
 
@@ -38,8 +38,8 @@ A modern web application for learning Chinese characters using flashcards. This 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/chinese-flashcards.git
-cd chinese-flashcards
+git clone https://github.com/yourusername/hanzifive.git
+cd hanzifive
 ```
 
 2. Install dependencies:
@@ -63,6 +63,26 @@ yarn dev
 ```
 
 5. Open your browser and navigate to `http://localhost:3000`
+
+## Creating a Distributable Package
+
+To create a distributable package that users can download and run without installing Node.js:
+
+1. Install the required packaging dependencies:
+```bash
+npm install --save-dev fs-extra archiver
+```
+
+2. Build and package the application:
+```bash
+npm run package
+```
+
+3. The distributable ZIP file will be created in the root directory: `HanziFive-v1.0.0.zip`
+
+4. Users can download, unzip, and run the application using:
+   - Windows: Double-click `HanziFive.bat`
+   - macOS/Linux: Double-click `HanziFive.sh` or run it from the terminal
 
 ## How to Use
 
@@ -115,7 +135,6 @@ yarn dev
 - Tags: Categories for flashcards
 - Decks: Collections of flashcards for studying
 - StudySessions: Records of study sessions
-
 
 ## License
 

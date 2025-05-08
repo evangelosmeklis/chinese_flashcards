@@ -1,12 +1,15 @@
 {
-  "name": "chinese-flashcards",
-  "version": "0.1.0",
+  "name": "hanzifive",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dist": "next build && npm run create-launcher",
+    "create-launcher": "node scripts/create-launcher.js",
+    "package": "npm run dist && node scripts/package-dist.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
@@ -36,8 +39,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "archiver": "^6.0.1",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
+    "fs-extra": "^11.2.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
