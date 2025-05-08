@@ -7,6 +7,7 @@ A modern web application for learning Chinese characters using flashcards. This 
 - Create flashcards with Chinese characters, pinyin, and English meaning
 - Add tags to flashcards for organization
 - Create custom decks of flashcards
+- Rename decks to keep your collection organized
 - Add cards to decks manually or by tag
 - Study decks in different modes:
   - Normal: Character → Pinyin & Meaning

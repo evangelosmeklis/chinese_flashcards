@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Shell } from '@/app/shell';
-import { getDeck, getFlashcards, getTags, addCardToDeck, removeCardFromDeck, addCardsToDeckByTag } from '@/lib/api';
+import { getDeck, getFlashcards, getTags, addCardToDeck, removeCardFromDeck, addCardsToDeckByTag, updateDeck } from '@/lib/api';
 import { DeckManagement } from '@/components/deck-management';
 import { Button } from '@/components/ui/button';
+import { RenameDeckModal } from '@/components/rename-deck-modal';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 
@@ -34,6 +35,8 @@ export default function DeckPage() {
   const [allTags, setAllTags] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [renameModalOpen, setRenameModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     loadData();
@@ -99,6 +102,29 @@ export default function DeckPage() {
     }
   };
 
+  const handleRenameDeck = async (deckId: string, newName: string) => {
+    setIsSubmitting(true);
+    try {
+      console.log(`Attempting to rename deck ${deckId} to "${newName}"`);
+      const updatedDeck = await updateDeck(deckId, { name: newName });
+      console.log('Rename success:', updatedDeck);
+      toast.success('Deck renamed successfully');
+      await loadData();
+      return Promise.resolve();
+    } catch (err) {
+      console.error('Error renaming deck:', err);
+      // Show more detailed error message
+      if (err instanceof Error) {
+        toast.error(`Failed to rename deck: ${err.message}`);
+      } else {
+        toast.error('Failed to rename deck');
+      }
+      return Promise.reject(err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <Shell>
@@ -132,6 +158,9 @@ export default function DeckPage() {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Manage Deck: {deck.name}</h1>
           <div className="flex gap-2">
+            <Button variant="outline" onClick={() => setRenameModalOpen(true)}>
+              Rename
+            </Button>
             <Link href="/decks">
               <Button variant="outline">Back to Decks</Button>
             </Link>
@@ -152,6 +181,16 @@ export default function DeckPage() {
           onRemoveCard={handleRemoveCard}
           onAddCardsByTag={handleAddCardsByTag}
         />
+
+        {deck && (
+          <RenameDeckModal 
+            deckId={deckId}
+            currentName={deck.name}
+            isOpen={renameModalOpen}
+            onClose={() => setRenameModalOpen(false)}
+            onRename={handleRenameDeck}
+          />
+        )}
       </div>
     </Shell>
   );

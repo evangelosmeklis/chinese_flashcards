@@ -23,6 +23,7 @@ export default function FlashcardsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filterTag, setFilterTag] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [editingFlashcard, setEditingFlashcard] = useState<Flashcard | null>(null);
   
   // Pagination state
@@ -37,7 +38,7 @@ export default function FlashcardsPage() {
   // Reset to first page when filtering changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [filterTag]);
+  }, [filterTag, searchTerm]);
 
   const loadFlashcards = async () => {
     setIsLoading(true);
@@ -81,7 +82,19 @@ export default function FlashcardsPage() {
     if (!editingFlashcard) return;
     
     try {
-      await updateFlashcard(editingFlashcard.id, values);
+      console.log('Attempting to update flashcard:', editingFlashcard.id);
+      
+      // Make sure we have valid data in our request
+      const updateData = {
+        character: values.character.trim(),
+        pinyin: values.pinyin.trim(),
+        meaning: values.meaning.trim(),
+        tags: values.tags
+      };
+      
+      console.log('Update values:', updateData);
+      const updatedFlashcard = await updateFlashcard(editingFlashcard.id, updateData);
+      console.log('Update successful:', updatedFlashcard);
       toast.success('Flashcard updated successfully');
       loadFlashcards();
       loadTags();
@@ -89,7 +102,12 @@ export default function FlashcardsPage() {
       return Promise.resolve();
     } catch (err) {
       console.error('Error updating flashcard:', err);
-      toast.error('Failed to update flashcard');
+      // Show more detailed error message
+      if (err instanceof Error) {
+        toast.error(`Failed to update flashcard: ${err.message}`);
+      } else {
+        toast.error('Failed to update flashcard');
+      }
       return Promise.reject(err);
     }
   };
@@ -109,10 +127,26 @@ export default function FlashcardsPage() {
     }
   };
 
-  // Filter cards by tag
-  const filteredFlashcards = filterTag
-    ? flashcards.filter(card => card.tags.includes(filterTag))
-    : flashcards;
+  // Filter cards by tag and search term
+  const filteredFlashcards = flashcards
+    .filter(card => {
+      // First filter by tag if one is selected
+      if (filterTag && !card.tags.includes(filterTag)) {
+        return false;
+      }
+      
+      // Then filter by search term if one is provided
+      if (searchTerm.trim() !== '') {
+        const term = searchTerm.toLowerCase().trim();
+        return (
+          card.character.toLowerCase().includes(term) ||
+          card.pinyin.toLowerCase().includes(term) ||
+          card.meaning.toLowerCase().includes(term)
+        );
+      }
+      
+      return true;
+    });
     
   // Calculate pagination values
   const indexOfLastCard = currentPage * cardsPerPage;
@@ -160,7 +194,7 @@ export default function FlashcardsPage() {
                 <select
                   value={filterTag}
                   onChange={(e) => setFilterTag(e.target.value)}
-                  className="p-2 border rounded-md"
+                  className="p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                 >
                   <option value="">All Tags</option>
                   {tags.map(tag => (
@@ -178,15 +212,44 @@ export default function FlashcardsPage() {
                 )}
               </div>
             </div>
+            
+            {/* Search Bar */}
+            <div className="mb-6">
+              <div className="flex">
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search by character, pinyin, or meaning..."
+                  className="flex-1 p-2 border rounded-l-md dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                />
+                {searchTerm && (
+                  <Button 
+                    variant="ghost"
+                    onClick={() => setSearchTerm('')}
+                    className="rounded-l-none border border-l-0 px-3"
+                  >
+                    ✕
+                  </Button>
+                )}
+              </div>
+              {searchTerm && (
+                <div className="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                  Searching for "{searchTerm}" - {filteredFlashcards.length} results found
+                </div>
+              )}
+            </div>
 
             {isLoading ? (
               <div className="py-12 text-center">Loading flashcards...</div>
             ) : error ? (
               <div className="py-12 text-center text-red-500">{error}</div>
             ) : filteredFlashcards.length === 0 ? (
-              <div className="bg-blue-50 p-6 rounded-lg text-center">
-                {filterTag ? (
-                  <p>No flashcards found with the tag "{filterTag}".</p>
+              <div className="bg-blue-50 dark:bg-blue-900/30 p-6 rounded-lg text-center">
+                {searchTerm ? (
+                  <p>No flashcards found matching "{searchTerm}"</p>
+                ) : filterTag ? (
+                  <p>No flashcards found with the tag "{filterTag}"</p>
                 ) : (
                   <p>You haven't created any flashcards yet. Get started by adding your first flashcard!</p>
                 )}
@@ -201,7 +264,7 @@ export default function FlashcardsPage() {
                     <CardContent>
                       <div className="flex flex-col gap-1">
                         <div className="font-medium text-lg">{card.pinyin}</div>
-                        <div className="text-gray-600">{card.meaning}</div>
+                        <div className="text-gray-600 dark:text-gray-300">{card.meaning}</div>
                       </div>
                       
                       {card.tags.length > 0 && (
@@ -209,7 +272,7 @@ export default function FlashcardsPage() {
                           {card.tags.map(tag => (
                             <span 
                               key={tag} 
-                              className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs cursor-pointer"
+                              className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full text-xs cursor-pointer"
                               onClick={() => setFilterTag(tag)}
                             >
                               {tag}
@@ -243,7 +306,7 @@ export default function FlashcardsPage() {
             {/* Pagination */}
             {totalPages > 0 && (
               <div className="mt-6 flex flex-col items-center space-y-2">
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-gray-600 dark:text-gray-400">
                   Showing {indexOfFirstCard + 1}-{Math.min(indexOfLastCard, filteredFlashcards.length)} of {filteredFlashcards.length} flashcards
                 </div>
                 <div className="flex items-center space-x-2">
@@ -306,7 +369,7 @@ export default function FlashcardsPage() {
                       setCardsPerPage(Number(e.target.value));
                       setCurrentPage(1); // Reset to first page when changing cards per page
                     }}
-                    className="p-1 border rounded-md text-sm"
+                    className="p-1 border rounded-md text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                   >
                     <option value={5}>5</option>
                     <option value={10}>10</option>

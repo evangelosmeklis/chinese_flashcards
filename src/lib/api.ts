@@ -119,6 +119,26 @@ export async function createDeck(data: {
 }
 
 /**
+ * Update a deck
+ */
+export async function updateDeck(
+  id: string,
+  data: {
+    name?: string;
+    description?: string;
+  }
+) {
+  const response = await fetch(`/api/decks/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse<any>(response);
+}
+
+/**
  * Add a flashcard to a deck
  */
 export async function addCardToDeck(deckId: string, flashcardId: string) {

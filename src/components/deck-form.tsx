@@ -58,7 +58,7 @@ export function DeckForm({ onSubmit }: DeckFormProps) {
             <input
               id="name"
               {...register('name')}
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 dark:text-white"
               placeholder="e.g. HSK Level 1"
             />
             {errors.name && (
@@ -73,7 +73,7 @@ export function DeckForm({ onSubmit }: DeckFormProps) {
             <textarea
               id="description"
               {...register('description')}
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 dark:text-white"
               rows={3}
               placeholder="Enter a description for this deck"
             />

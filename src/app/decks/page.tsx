@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { Shell } from '@/app/shell';
-import { getDecks, createDeck, getDeck } from '@/lib/api';
+import { getDecks, createDeck, getDeck, updateDeck } from '@/lib/api';
 import { DeckForm } from '@/components/deck-form';
+import { RenameDeckModal } from '@/components/rename-deck-modal';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -21,6 +22,9 @@ export default function DecksPage() {
   const [decks, setDecks] = useState<Deck[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [renameModalOpen, setRenameModalOpen] = useState(false);
+  const [deckToRename, setDeckToRename] = useState<Deck | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     loadDecks();
@@ -50,6 +54,39 @@ export default function DecksPage() {
       console.error('Error creating deck:', err);
       toast.error('Failed to create deck');
       return Promise.reject(err);
+    }
+  };
+
+  const handleOpenRenameModal = (deck: Deck) => {
+    setDeckToRename(deck);
+    setRenameModalOpen(true);
+  };
+
+  const handleCloseRenameModal = () => {
+    setRenameModalOpen(false);
+    setDeckToRename(null);
+  };
+
+  const handleRenameDeck = async (deckId: string, newName: string) => {
+    setIsSubmitting(true);
+    try {
+      console.log(`Attempting to rename deck ${deckId} to "${newName}"`);
+      const updatedDeck = await updateDeck(deckId, { name: newName });
+      console.log('Rename success:', updatedDeck);
+      toast.success('Deck renamed successfully');
+      loadDecks();
+      return Promise.resolve();
+    } catch (err) {
+      console.error('Error renaming deck:', err);
+      // Show more detailed error message
+      if (err instanceof Error) {
+        toast.error(`Failed to rename deck: ${err.message}`);
+      } else {
+        toast.error('Failed to rename deck');
+      }
+      return Promise.reject(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -91,7 +128,7 @@ export default function DecksPage() {
                       </div>
                     </CardContent>
                     <div className="p-4 pt-0 border-t mt-auto">
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 mb-2">
                         <Link href={`/decks/${deck.id}`} className="flex-1">
                           <Button variant="outline" className="w-full">
                             Manage
@@ -103,6 +140,13 @@ export default function DecksPage() {
                           </Button>
                         </Link>
                       </div>
+                      <Button 
+                        variant="ghost" 
+                        className="w-full text-sm"
+                        onClick={() => handleOpenRenameModal(deck)}
+                      >
+                        Rename
+                      </Button>
                     </div>
                   </Card>
                 ))}
@@ -110,6 +154,16 @@ export default function DecksPage() {
             )}
           </div>
         </div>
+
+        {deckToRename && (
+          <RenameDeckModal 
+            deckId={deckToRename.id}
+            currentName={deckToRename.name}
+            isOpen={renameModalOpen}
+            onClose={handleCloseRenameModal}
+            onRename={handleRenameDeck}
+          />
+        )}
       </div>
     </Shell>
   );
