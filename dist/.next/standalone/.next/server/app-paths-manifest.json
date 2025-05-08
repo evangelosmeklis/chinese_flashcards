@@ -1,0 +1,22 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/decks/[id]/cards/[cardId]/route": "app/api/decks/[id]/cards/[cardId]/route.js",
+  "/api/decks/[id]/cards/byTag/route": "app/api/decks/[id]/cards/byTag/route.js",
+  "/api/decks/[id]/cards/route": "app/api/decks/[id]/cards/route.js",
+  "/api/decks/[id]/route": "app/api/decks/[id]/route.js",
+  "/api/decks/[id]/study-sessions/route": "app/api/decks/[id]/study-sessions/route.js",
+  "/api/decks/route": "app/api/decks/route.js",
+  "/api/flashcards/[id]/route": "app/api/flashcards/[id]/route.js",
+  "/api/flashcards/route": "app/api/flashcards/route.js",
+  "/api/study-sessions/route": "app/api/study-sessions/route.js",
+  "/api/tags/route": "app/api/tags/route.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/decks/[id]/history/page": "app/decks/[id]/history/page.js",
+  "/decks/[id]/page": "app/decks/[id]/page.js",
+  "/decks/page": "app/decks/page.js",
+  "/flashcards/page": "app/flashcards/page.js",
+  "/page": "app/page.js",
+  "/study/[id]/page": "app/study/[id]/page.js",
+  "/study/page": "app/study/page.js",
+  "/study-sessions/page": "app/study-sessions/page.js"
+}

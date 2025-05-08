@@ -1,0 +1,153 @@
+{
+  "version": 3,
+  "pages404": true,
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "dynamicRoutes": [
+    {
+      "page": "/api/decks/[id]",
+      "regex": "^/api/decks/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/decks/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/decks/[id]/cards",
+      "regex": "^/api/decks/([^/]+?)/cards(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/decks/(?<nxtPid>[^/]+?)/cards(?:/)?$"
+    },
+    {
+      "page": "/api/decks/[id]/cards/byTag",
+      "regex": "^/api/decks/([^/]+?)/cards/byTag(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/decks/(?<nxtPid>[^/]+?)/cards/byTag(?:/)?$"
+    },
+    {
+      "page": "/api/decks/[id]/cards/[cardId]",
+      "regex": "^/api/decks/([^/]+?)/cards/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid",
+        "nxtPcardId": "nxtPcardId"
+      },
+      "namedRegex": "^/api/decks/(?<nxtPid>[^/]+?)/cards/(?<nxtPcardId>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/decks/[id]/study-sessions",
+      "regex": "^/api/decks/([^/]+?)/study\\-sessions(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/decks/(?<nxtPid>[^/]+?)/study\\-sessions(?:/)?$"
+    },
+    {
+      "page": "/api/flashcards/[id]",
+      "regex": "^/api/flashcards/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/flashcards/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/decks/[id]",
+      "regex": "^/decks/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/decks/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/decks/[id]/history",
+      "regex": "^/decks/([^/]+?)/history(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/decks/(?<nxtPid>[^/]+?)/history(?:/)?$"
+    },
+    {
+      "page": "/study/[id]",
+      "regex": "^/study/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/study/(?<nxtPid>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/decks",
+      "regex": "^/decks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/decks(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/flashcards",
+      "regex": "^/flashcards(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/flashcards(?:/)?$"
+    },
+    {
+      "page": "/study",
+      "regex": "^/study(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/study(?:/)?$"
+    },
+    {
+      "page": "/study-sessions",
+      "regex": "^/study\\-sessions(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/study\\-sessions(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "RSC",
+    "varyHeader": "RSC, Next-Router-State-Tree, Next-Router-Prefetch, Next-Router-Segment-Prefetch",
+    "prefetchHeader": "Next-Router-Prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSuffix": ".prefetch.rsc",
+    "prefetchSegmentHeader": "Next-Router-Segment-Prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments"
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  },
+  "rewrites": []
+}

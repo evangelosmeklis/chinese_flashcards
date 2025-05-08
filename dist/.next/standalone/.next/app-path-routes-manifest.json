@@ -1,0 +1,22 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/api/decks/[id]/cards/[cardId]/route": "/api/decks/[id]/cards/[cardId]",
+  "/api/decks/[id]/cards/byTag/route": "/api/decks/[id]/cards/byTag",
+  "/api/decks/[id]/cards/route": "/api/decks/[id]/cards",
+  "/api/decks/[id]/route": "/api/decks/[id]",
+  "/api/decks/[id]/study-sessions/route": "/api/decks/[id]/study-sessions",
+  "/api/decks/route": "/api/decks",
+  "/api/flashcards/[id]/route": "/api/flashcards/[id]",
+  "/api/flashcards/route": "/api/flashcards",
+  "/api/study-sessions/route": "/api/study-sessions",
+  "/api/tags/route": "/api/tags",
+  "/favicon.ico/route": "/favicon.ico",
+  "/decks/[id]/history/page": "/decks/[id]/history",
+  "/decks/[id]/page": "/decks/[id]",
+  "/decks/page": "/decks",
+  "/flashcards/page": "/flashcards",
+  "/page": "/",
+  "/study/[id]/page": "/study/[id]",
+  "/study/page": "/study",
+  "/study-sessions/page": "/study-sessions"
+}

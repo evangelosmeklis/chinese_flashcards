@@ -1,22 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
-interface Params {
-  params: {
-    id: string;
-  };
-}
-
 // GET /api/flashcards/[id] - Get a single flashcard
-export async function GET(request: NextRequest, { params }: Params) {
-  const id = params.id;
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  // Await params since it's a Promise in Next.js 15
+  const { id } = await params;
 
   try {
     const flashcard = await db.flashcard.findUnique({
       where: { id },
-      include: {
-        tags: true,
-      },
+      include: { tags: true },
     });
 
     if (!flashcard) {
@@ -26,6 +22,7 @@ export async function GET(request: NextRequest, { params }: Params) {
       );
     }
 
+    // Format the response to include the tags as strings
     const formattedFlashcard = {
       ...flashcard,
       tags: flashcard.tags.map((tag: any) => tag.name),
@@ -60,8 +57,12 @@ async function retryOperation<T>(operation: () => Promise<T>, maxRetries = 3): P
 }
 
 // PUT /api/flashcards/[id] - Update a flashcard
-export async function PUT(request: NextRequest, { params }: Params) {
-  const id = params.id;
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  // Await params since it's a Promise in Next.js 15
+  const { id } = await params;
 
   try {
     const body = await request.json();
@@ -227,8 +228,12 @@ export async function PUT(request: NextRequest, { params }: Params) {
 }
 
 // DELETE /api/flashcards/[id] - Delete a flashcard
-export async function DELETE(request: NextRequest, { params }: Params) {
-  const id = params.id;
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  // Await params since it's a Promise in Next.js 15
+  const { id } = await params;
 
   try {
     // Check if flashcard exists

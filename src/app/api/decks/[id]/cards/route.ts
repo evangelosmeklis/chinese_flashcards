@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
-interface Params {
-  params: {
-    id: string;
-  };
-}
-
 // POST /api/decks/[id]/cards - Add a flashcard to a deck
-export async function POST(request: NextRequest, { params }: Params) {
-  const deckId = params.id;
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  // Await params since it's a Promise in Next.js 15
+  const { id } = await params;
+  const deckId = id;
 
   try {
     const body = await request.json();

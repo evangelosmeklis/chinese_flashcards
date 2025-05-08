@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
-interface Params {
-  params: {
-    id: string;
-  };
-}
-
 // GET /api/decks/[id] - Get a single deck with its flashcards
-export async function GET(request: NextRequest, { params }: Params) {
-  const id = params.id;
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  // Await params since it's a Promise in Next.js 15
+  const { id } = await params;
 
   try {
     const deck = await db.deck.findUnique({
@@ -50,8 +48,12 @@ export async function GET(request: NextRequest, { params }: Params) {
 }
 
 // PUT /api/decks/[id] - Update a deck
-export async function PUT(request: NextRequest, { params }: Params) {
-  const id = params.id;
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  // Await params since it's a Promise in Next.js 15
+  const { id } = await params;
 
   try {
     const body = await request.json();
@@ -91,8 +93,12 @@ export async function PUT(request: NextRequest, { params }: Params) {
 }
 
 // DELETE /api/decks/[id] - Delete a deck
-export async function DELETE(request: NextRequest, { params }: Params) {
-  const id = params.id;
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  // Await params since it's a Promise in Next.js 15
+  const { id } = await params;
 
   try {
     // Check if deck exists

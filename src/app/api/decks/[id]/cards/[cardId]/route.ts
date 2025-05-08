@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
-interface Params {
-  params: {
-    id: string;
-    cardId: string;
-  };
-}
-
 // DELETE /api/decks/[id]/cards/[cardId] - Remove a flashcard from a deck
-export async function DELETE(request: NextRequest, { params }: Params) {
-  const deckId = params.id;
-  const flashcardId = params.cardId;
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string; cardId: string }> }
+) {
+  // Await params since it's a Promise in Next.js 15
+  const { id, cardId } = await params;
+  const deckId = id;
+  const flashcardId = cardId;
 
   try {
     // Check if deck exists
