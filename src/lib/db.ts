@@ -2,8 +2,12 @@ import { PrismaClient } from '../generated/prisma';
 import fs from 'fs';
 import path from 'path';
 
-// Before creating the Prisma client, check and fix database permissions if needed
+// Calculate absolute path to the database
 const dbPath = path.resolve(process.cwd(), 'prisma/dev.db');
+const absoluteDbUrl = `file:${dbPath}`;
+
+console.log('Using database at:', dbPath);
+
 try {
   // Check if file exists and is writable
   if (fs.existsSync(dbPath)) {
@@ -20,6 +24,8 @@ try {
         console.error('Failed to fix database permissions:', chmodErr);
       }
     }
+  } else {
+    console.warn('Database file does not exist at:', dbPath);
   }
 } catch (err) {
   console.error('Error checking database file:', err);
@@ -36,7 +42,7 @@ export const db =
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
     datasources: {
       db: {
-        url: process.env.DATABASE_URL || 'file:./prisma/dev.db?mode=rw'
+        url: process.env.DATABASE_URL || absoluteDbUrl
       }
     },
     errorFormat: 'pretty'
