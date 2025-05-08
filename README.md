@@ -40,7 +40,7 @@ A modern web application for learning Chinese characters using flashcards. This 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/hanzifive.git
+git clone https://github.com/evangelosmesklis/hanzifive.git
 cd hanzifive
 ```
 

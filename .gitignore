@@ -45,6 +45,8 @@ prisma/dev.db
 prisma/dev.db-journal
 prisma/*.db
 prisma/*.db-journal
+prisma/*.db.backup*
+prisma/dev.db.backup_*
 *.db
 *.db-journal
 *.sqlite
