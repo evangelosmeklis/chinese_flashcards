@@ -2,6 +2,8 @@
 
 A modern web application for learning Chinese characters using flashcards. This app allows you to create, organize, and study Chinese characters with their pinyin pronunciation and English meaning.
 
+![HanziFive App](/public/hanzifive.gif)
+
 ## Features
 
 - Create flashcards with Chinese characters, pinyin, and English meaning
