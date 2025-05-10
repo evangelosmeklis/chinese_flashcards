@@ -209,4 +209,58 @@ export async function getStudySessions() {
 export async function getDeckStudySessions(deckId: string) {
   const response = await fetch(`/api/decks/${deckId}/study-sessions`);
   return handleResponse<any[]>(response);
+}
+
+/**
+ * Export all flashcards as JSON
+ */
+export async function exportFlashcards() {
+  const response = await fetch('/api/flashcards/export');
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    const errorMessage = errorData?.message || response.statusText || 'Something went wrong';
+    throw new Error(errorMessage);
+  }
+  return response;
+}
+
+/**
+ * Import flashcards from JSON
+ */
+export async function importFlashcards(data: any[]) {
+  const response = await fetch('/api/flashcards/import', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse<any>(response);
+}
+
+/**
+ * Export all decks as JSON
+ */
+export async function exportDecks() {
+  const response = await fetch('/api/decks/export');
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => null);
+    const errorMessage = errorData?.message || response.statusText || 'Something went wrong';
+    throw new Error(errorMessage);
+  }
+  return response;
+}
+
+/**
+ * Import decks from JSON
+ */
+export async function importDecks(data: any[]) {
+  const response = await fetch('/api/decks/import', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse<any>(response);
 } 

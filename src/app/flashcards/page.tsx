@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { Shell } from '@/app/shell';
-import { getFlashcards, getTags, createFlashcard, deleteFlashcard, updateFlashcard } from '@/lib/api';
+import { getFlashcards, getTags, createFlashcard, deleteFlashcard, updateFlashcard, exportFlashcards, importFlashcards } from '@/lib/api';
 import { FlashcardForm } from '@/components/flashcard-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
+import { Download } from 'lucide-react';
+import { ImportFileDialog } from '@/components/import-file-dialog';
 
 interface Flashcard {
   id: string;
@@ -22,13 +24,60 @@ export default function FlashcardsPage() {
   const [tags, setTags] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filterTag, setFilterTag] = useState<string>('');
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [filterTag, setFilterTag] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [editingFlashcard, setEditingFlashcard] = useState<Flashcard | null>(null);
   
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(10);
+
+  // Helper function to normalize pinyin by removing tones
+  const normalizePinyin = (pinyin: string): string => {
+    return pinyin
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove diacritics (tones)
+      .replace(/[üǖǘǚǜ]/g, 'u') // Replace ü with u
+      .replace(/[v]/g, 'u'); // Replace v with u (common in some pinyin systems)
+  };
+
+  // Helper function to check for duplicates
+  const checkForDuplicates = (values: { character: string; pinyin: string; meaning: string }) => {
+    const duplicates = {
+      character: false,
+      pinyin: false,
+      meaning: false
+    };
+
+    const normalizedNewPinyin = normalizePinyin(values.pinyin);
+
+    flashcards.forEach(card => {
+      if (card.character === values.character) {
+        duplicates.character = true;
+      }
+      if (normalizePinyin(card.pinyin) === normalizedNewPinyin) {
+        duplicates.pinyin = true;
+      }
+      if (card.meaning.toLowerCase() === values.meaning.toLowerCase()) {
+        duplicates.meaning = true;
+      }
+    });
+
+    return duplicates;
+  };
+
+  // Helper function to format duplicate warning message
+  const formatDuplicateWarning = (duplicates: { character: boolean; pinyin: boolean; meaning: boolean }) => {
+    const duplicateFields = [];
+    if (duplicates.character) duplicateFields.push('character');
+    if (duplicates.pinyin) duplicateFields.push('pinyin');
+    if (duplicates.meaning) duplicateFields.push('meaning');
+
+    if (duplicateFields.length === 0) return null;
+
+    return `This flashcard has duplicate ${duplicateFields.join(', ')} with existing flashcards. Do you want to proceed anyway?`;
+  };
 
   useEffect(() => {
     loadFlashcards();
@@ -66,6 +115,17 @@ export default function FlashcardsPage() {
 
   const handleAddFlashcard = async (values: any) => {
     try {
+      // Check for duplicates
+      const duplicates = checkForDuplicates(values);
+      const warningMessage = formatDuplicateWarning(duplicates);
+
+      if (warningMessage) {
+        const shouldProceed = window.confirm(warningMessage);
+        if (!shouldProceed) {
+          return Promise.reject(new Error('Flashcard creation cancelled by user'));
+        }
+      }
+
       await createFlashcard(values);
       toast.success('Flashcard added successfully');
       loadFlashcards();
@@ -73,6 +133,9 @@ export default function FlashcardsPage() {
       return Promise.resolve();
     } catch (err) {
       console.error('Error adding flashcard:', err);
+      if (err instanceof Error && err.message === 'Flashcard creation cancelled by user') {
+        return Promise.reject(err);
+      }
       toast.error('Failed to add flashcard');
       return Promise.reject(err);
     }
@@ -82,6 +145,21 @@ export default function FlashcardsPage() {
     if (!editingFlashcard) return;
     
     try {
+      // Check for duplicates, excluding the current card being edited
+      const duplicates = checkForDuplicates({
+        ...values,
+        // Filter out the current card from the duplicate check
+        flashcards: flashcards.filter(card => card.id !== editingFlashcard.id)
+      });
+      const warningMessage = formatDuplicateWarning(duplicates);
+
+      if (warningMessage) {
+        const shouldProceed = window.confirm(warningMessage);
+        if (!shouldProceed) {
+          return Promise.reject(new Error('Flashcard update cancelled by user'));
+        }
+      }
+
       console.log('Attempting to update flashcard:', editingFlashcard.id);
       
       // Make sure we have valid data in our request
@@ -102,6 +180,9 @@ export default function FlashcardsPage() {
       return Promise.resolve();
     } catch (err) {
       console.error('Error updating flashcard:', err);
+      if (err instanceof Error && err.message === 'Flashcard update cancelled by user') {
+        return Promise.reject(err);
+      }
       // Show more detailed error message
       if (err instanceof Error) {
         toast.error(`Failed to update flashcard: ${err.message}`);
@@ -127,6 +208,42 @@ export default function FlashcardsPage() {
     }
   };
 
+  const handleExportFlashcards = async () => {
+    try {
+      const response = await exportFlashcards();
+      
+      // Create a download link and click it
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = response.headers.get('Content-Disposition')?.split('filename=')[1].replace(/"/g, '') || 'flashcards.json';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      toast.success('Flashcards exported successfully');
+    } catch (err) {
+      console.error('Error exporting flashcards:', err);
+      toast.error('Failed to export flashcards');
+    }
+  };
+
+  const handleImportFlashcards = async (data: any) => {
+    try {
+      const result = await importFlashcards(data);
+      toast.success(`Import complete: ${result.results.imported} imported, ${result.results.skipped} skipped`);
+      loadFlashcards();
+      loadTags();
+      return Promise.resolve();
+    } catch (err) {
+      console.error('Error importing flashcards:', err);
+      toast.error('Failed to import flashcards');
+      return Promise.reject(err);
+    }
+  };
+
   // Filter cards by tag and search term
   const filteredFlashcards = flashcards
     .filter(card => {
@@ -138,9 +255,12 @@ export default function FlashcardsPage() {
       // Then filter by search term if one is provided
       if (searchTerm.trim() !== '') {
         const term = searchTerm.toLowerCase().trim();
+        const normalizedTerm = normalizePinyin(term);
+        const normalizedCardPinyin = normalizePinyin(card.pinyin);
+        
         return (
           card.character.toLowerCase().includes(term) ||
-          card.pinyin.toLowerCase().includes(term) ||
+          normalizedCardPinyin.includes(normalizedTerm) ||
           card.meaning.toLowerCase().includes(term)
         );
       }
@@ -165,9 +285,22 @@ export default function FlashcardsPage() {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Form Section */}
           <div className="md:w-1/3">
-            <h1 className="text-2xl font-bold mb-6">
-              {editingFlashcard ? 'Edit Flashcard' : 'Flashcards'}
-            </h1>
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-2xl font-bold">
+                {editingFlashcard ? 'Edit Flashcard' : 'Flashcards'}
+              </h1>
+              <div className="flex gap-2">
+                <ImportFileDialog 
+                  title="Import Flashcards" 
+                  onImport={handleImportFlashcards} 
+                  buttonText="Import"
+                />
+                <Button variant="outline" size="sm" onClick={handleExportFlashcards}>
+                  <Download className="mr-2 h-4 w-4" />
+                  Export
+                </Button>
+              </div>
+            </div>
             {editingFlashcard ? (
               <FlashcardForm 
                 onSubmit={handleEditFlashcard} 
@@ -192,8 +325,8 @@ export default function FlashcardsPage() {
               {/* Tag Filter */}
               <div className="flex items-center gap-2">
                 <select
-                  value={filterTag}
-                  onChange={(e) => setFilterTag(e.target.value)}
+                  value={filterTag || ''}
+                  onChange={(e) => setFilterTag(e.target.value || null)}
                   className="p-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                 >
                   <option value="">All Tags</option>
@@ -205,7 +338,7 @@ export default function FlashcardsPage() {
                   <Button 
                     variant="ghost" 
                     size="sm"
-                    onClick={() => setFilterTag('')}
+                    onClick={() => setFilterTag(null)}
                   >
                     Clear
                   </Button>
