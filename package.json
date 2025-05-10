@@ -9,10 +9,7 @@
     "lint": "next lint",
     "dist": "next build && npm run create-launcher",
     "create-launcher": "node scripts/create-launcher.js",
-    "package": "npm run dist && node scripts/package-dist.js",
-    "electron-dev": "next dev & electron .",
-    "electron-build": "next build && next export -o renderer/out && electron-builder",
-    "electron-start": "electron ."
+    "package": "npm run dist && node scripts/package-dist.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.0.1",
@@ -43,18 +40,10 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "archiver": "^6.0.2",
-    "electron": "^36.2.0",
-    "electron-builder": "^26.0.12",
-    "electron-is-dev": "^3.0.1",
     "eslint": "^9",
     "eslint-config-next": "15.3.2",
     "fs-extra": "^11.3.0",
-    "nextron": "^9.5.0",
     "tailwindcss": "^4",
     "typescript": "^5"
-  },
-  "main": "main/background.js",
-  "build": {
-    "extends": "./electron-builder.json"
   }
 }
