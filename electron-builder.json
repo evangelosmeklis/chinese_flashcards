@@ -1,0 +1,22 @@
+{
+  "appId": "com.hanzifive.app",
+  "productName": "HanziFive",
+  "directories": {
+    "output": "dist"
+  },
+  "files": [
+    "main/**/*",
+    "renderer/out/**/*"
+  ],
+  "mac": {
+    "category": "public.app-category.education",
+    "target": ["dmg", "zip"]
+  },
+  "win": {
+    "target": ["nsis", "portable"]
+  },
+  "linux": {
+    "target": ["AppImage", "deb"],
+    "category": "Education"
+  }
+} 
