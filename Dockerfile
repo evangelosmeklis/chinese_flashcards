@@ -9,10 +9,8 @@ RUN mkdir /data
 ENV DATABASE_URL="file:/data/dev.db"
 
 RUN yarn install \
-	&& npx prisma generate \
-	&& npx prisma migrate dev
+	&& npx prisma generate
 
 EXPOSE 3000 
 
-CMD ["yarn", "dev"]
-
+CMD bash -c "npx prisma migrate deploy && exec yarn dev"
