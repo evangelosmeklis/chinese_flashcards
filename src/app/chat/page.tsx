@@ -39,6 +39,7 @@ export default function ChatPage() {
     waitingForResponse: false,
   });
   const [inputValue, setInputValue] = useState('');
+  const [activeTab, setActiveTab] = useState<'chat' | 'characters'>('chat');
   
   // API Provider state
   const [apiProvider, setApiProvider] = useState<ApiProvider>('none');
@@ -175,6 +176,45 @@ export default function ChatPage() {
     }));
   };
 
+  const handleCopyCharacters = () => {
+    const characters = learningData.map(card => card.character).join('');
+    navigator.clipboard.writeText(characters)
+      .then(() => {
+        toast.success('Characters copied to clipboard!');
+      })
+      .catch((err) => {
+        console.error('Failed to copy characters:', err);
+        toast.error('Failed to copy characters to clipboard');
+      });
+  };
+  
+  const handleCopyWithMeanings = () => {
+    const formatted = learningData.map(card => `${card.character} (${card.meaning})`).join(', ');
+    navigator.clipboard.writeText(formatted)
+      .then(() => {
+        toast.success('Characters with meanings copied to clipboard!');
+      })
+      .catch((err) => {
+        console.error('Failed to copy characters with meanings:', err);
+        toast.error('Failed to copy to clipboard');
+      });
+  };
+
+  const handleCopyStructured = () => {
+    const formatted = learningData.map(card => 
+      `Character: ${card.character}\nPinyin: ${card.pinyin}\nMeaning: ${card.meaning}`
+    ).join('\n\n');
+    
+    navigator.clipboard.writeText(formatted)
+      .then(() => {
+        toast.success('Structured data copied to clipboard!');
+      })
+      .catch((err) => {
+        console.error('Failed to copy structured data:', err);
+        toast.error('Failed to copy to clipboard');
+      });
+  };
+
   return (
     <Shell>
       <div className="container mx-auto px-4 py-8">
@@ -217,101 +257,194 @@ export default function ChatPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Tabs defaultValue="chinese" className="w-full">
+              <Tabs 
+                defaultValue="chat" 
+                className="w-full"
+                onValueChange={(value) => setActiveTab(value as 'chat' | 'characters')}
+              >
                 <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger 
-                    value="chinese" 
-                    onClick={() => switchMode('chinese')}
-                  >
-                    Chinese → English
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="english" 
-                    onClick={() => switchMode('english')}
-                  >
-                    English → Chinese
-                  </TabsTrigger>
+                  <TabsTrigger value="chat">Practice Chat</TabsTrigger>
+                  <TabsTrigger value="characters">Learned Characters</TabsTrigger>
                 </TabsList>
                 
-                <TabsContent value="chinese" className="space-y-4">
-                  <p>
-                    The assistant will give you Chinese sentences using only characters you've learned.
-                    Try to translate them into English.
-                  </p>
+                <TabsContent value="chat" className="space-y-4">
+                  <Tabs defaultValue="chinese" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2 mb-6">
+                      <TabsTrigger 
+                        value="chinese" 
+                        onClick={() => switchMode('chinese')}
+                      >
+                        Chinese → English
+                      </TabsTrigger>
+                      <TabsTrigger 
+                        value="english" 
+                        onClick={() => switchMode('english')}
+                      >
+                        English → Chinese
+                      </TabsTrigger>
+                    </TabsList>
+                    
+                    <TabsContent value="chinese" className="space-y-4">
+                      <p>
+                        The assistant will give you Chinese sentences using only characters you've learned.
+                        Try to translate them into English.
+                      </p>
+                    </TabsContent>
+                    
+                    <TabsContent value="english" className="space-y-4">
+                      <p>
+                        The assistant will give you English sentences based on words you've learned.
+                        Try to translate them into Chinese characters.
+                      </p>
+                    </TabsContent>
+                    
+                    <div className="border rounded-md p-4 mt-4 h-96 overflow-y-auto">
+                      <div className="flex flex-col gap-4">
+                        {chatState.messages.length === 0 ? (
+                          <div className="text-center text-gray-400 my-auto">
+                            {apiProvider !== 'none' && apiKey 
+                              ? 'Start chatting to practice your Chinese!'
+                              : 'Please set up your AI provider API key to start chatting'}
+                          </div>
+                        ) : (
+                          chatState.messages.map((message, index) => (
+                            <div 
+                              key={index} 
+                              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                            >
+                              <div 
+                                className={`max-w-[80%] rounded-lg px-4 py-2 ${
+                                  message.role === 'user' 
+                                    ? 'bg-blue-500 text-white' 
+                                    : 'bg-gray-100 dark:bg-gray-800'
+                                }`}
+                              >
+                                {message.content}
+                              </div>
+                            </div>
+                          ))
+                        )}
+                        {chatState.waitingForResponse && (
+                          <div className="flex justify-start">
+                            <div className="max-w-[80%] rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-800">
+                              <div className="flex gap-2">
+                                <div className="h-2 w-2 bg-gray-400 rounded-full animate-bounce"></div>
+                                <div className="h-2 w-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                                <div className="h-2 w-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        <div ref={chatEndRef} />
+                      </div>
+                    </div>
+                    
+                    <form onSubmit={handleSendMessage} className="mt-4 flex gap-2">
+                      <input
+                        type="text"
+                        placeholder={`Type your ${chatState.mode === 'chinese' ? 'English translation' : 'Chinese translation'}...`}
+                        className="flex-1 p-2 border rounded-md"
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        disabled={apiProvider === 'none' || !apiKey || chatState.waitingForResponse}
+                      />
+                      <Button 
+                        type="submit" 
+                        disabled={apiProvider === 'none' || !apiKey || !inputValue.trim() || chatState.waitingForResponse}
+                      >
+                        Send
+                      </Button>
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        onClick={resetChat}
+                        disabled={chatState.messages.length === 0 || chatState.waitingForResponse}
+                      >
+                        Reset
+                      </Button>
+                    </form>
+                  </Tabs>
                 </TabsContent>
                 
-                <TabsContent value="english" className="space-y-4">
-                  <p>
-                    The assistant will give you English sentences based on words you've learned.
-                    Try to translate them into Chinese characters.
-                  </p>
-                </TabsContent>
-                
-                <div className="border rounded-md p-4 mt-4 h-96 overflow-y-auto">
-                  <div className="flex flex-col gap-4">
-                    {chatState.messages.length === 0 ? (
-                      <div className="text-center text-gray-400 my-auto">
-                        {apiProvider !== 'none' && apiKey 
-                          ? 'Start chatting to practice your Chinese!'
-                          : 'Please set up your AI provider API key to start chatting'}
-                      </div>
-                    ) : (
-                      chatState.messages.map((message, index) => (
-                        <div 
-                          key={index} 
-                          className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                        >
-                          <div 
-                            className={`max-w-[80%] rounded-lg px-4 py-2 ${
-                              message.role === 'user' 
-                                ? 'bg-blue-500 text-white' 
-                                : 'bg-gray-100 dark:bg-gray-800'
-                            }`}
-                          >
-                            {message.content}
+                <TabsContent value="characters" className="space-y-6">
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="text-lg font-medium mb-2">Your Learned Characters</h3>
+                      <p className="text-sm text-gray-500">
+                        Here you can view and copy all the Chinese characters you've learned for use in external applications.
+                      </p>
+                    </div>
+                    
+                    <div className="flex gap-2 flex-wrap">
+                      <Button onClick={handleCopyCharacters}>
+                        Copy Characters Only
+                      </Button>
+                      <Button onClick={handleCopyWithMeanings} variant="outline">
+                        Copy with Meanings
+                      </Button>
+                      <Button onClick={handleCopyStructured} variant="outline">
+                        Copy Structured Data
+                      </Button>
+                    </div>
+                    
+                    <div className="border rounded-md p-4 bg-gray-50 dark:bg-gray-800/50 min-h-[300px]">
+                      {isLoadingData ? (
+                        <div className="flex justify-center items-center h-full">
+                          <p>Loading your learned characters...</p>
+                        </div>
+                      ) : learningData.length === 0 ? (
+                        <div className="flex justify-center items-center h-full">
+                          <p>You haven't learned any characters yet.</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-6">
+                          <div>
+                            <h4 className="text-sm font-medium mb-2">Characters Only</h4>
+                            <div className="p-3 bg-white dark:bg-gray-900 border rounded-md text-lg break-all">
+                              {learningData.map(card => card.character).join('')}
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <h4 className="text-sm font-medium mb-2">Characters with Meanings</h4>
+                            <div className="p-3 bg-white dark:bg-gray-900 border rounded-md break-all">
+                              {learningData.map((card, idx) => (
+                                <span key={card.id} className="inline-block mb-2 mr-2">
+                                  <span className="font-medium">{card.character}</span>
+                                  <span className="text-gray-500 text-sm"> ({card.meaning})</span>
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          
+                          <div>
+                            <h4 className="text-sm font-medium mb-2">Table View</h4>
+                            <div className="border rounded-md overflow-auto max-h-[300px]">
+                              <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead className="bg-gray-50 dark:bg-gray-800">
+                                  <tr>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Character</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Pinyin</th>
+                                    <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Meaning</th>
+                                  </tr>
+                                </thead>
+                                <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+                                  {learningData.map(card => (
+                                    <tr key={card.id}>
+                                      <td className="px-4 py-3 text-lg">{card.character}</td>
+                                      <td className="px-4 py-3">{card.pinyin}</td>
+                                      <td className="px-4 py-3">{card.meaning}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
                           </div>
                         </div>
-                      ))
-                    )}
-                    {chatState.waitingForResponse && (
-                      <div className="flex justify-start">
-                        <div className="max-w-[80%] rounded-lg px-4 py-2 bg-gray-100 dark:bg-gray-800">
-                          <div className="flex gap-2">
-                            <div className="h-2 w-2 bg-gray-400 rounded-full animate-bounce"></div>
-                            <div className="h-2 w-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                            <div className="h-2 w-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                    <div ref={chatEndRef} />
+                      )}
+                    </div>
                   </div>
-                </div>
-                
-                <form onSubmit={handleSendMessage} className="mt-4 flex gap-2">
-                  <input
-                    type="text"
-                    placeholder={`Type your ${chatState.mode === 'chinese' ? 'English translation' : 'Chinese translation'}...`}
-                    className="flex-1 p-2 border rounded-md"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    disabled={apiProvider === 'none' || !apiKey || chatState.waitingForResponse}
-                  />
-                  <Button 
-                    type="submit" 
-                    disabled={apiProvider === 'none' || !apiKey || !inputValue.trim() || chatState.waitingForResponse}
-                  >
-                    Send
-                  </Button>
-                  <Button 
-                    type="button" 
-                    variant="outline" 
-                    onClick={resetChat}
-                    disabled={chatState.messages.length === 0 || chatState.waitingForResponse}
-                  >
-                    Reset
-                  </Button>
-                </form>
+                </TabsContent>
               </Tabs>
             </CardContent>
           </Card>
