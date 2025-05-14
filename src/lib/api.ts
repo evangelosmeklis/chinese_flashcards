@@ -263,4 +263,25 @@ export async function importDecks(data: any[]) {
     body: JSON.stringify(data),
   });
   return handleResponse<any>(response);
+}
+
+/**
+ * Send message to chat
+ */
+export async function sendChatMessage(data: {
+  message: string;
+  mode: 'chinese' | 'english';
+  learningData: any[];
+  history: {role: 'user' | 'assistant', content: string}[];
+  provider: 'openai' | 'anthropic' | 'gemini' | 'none';
+  apiKey: string;
+}) {
+  const response = await fetch('/api/chat/message', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse<{response: string}>(response);
 } 
