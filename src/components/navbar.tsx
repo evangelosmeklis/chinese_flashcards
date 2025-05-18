@@ -10,7 +10,7 @@ const NAV_ITEMS = [
   { name: 'Decks', href: '/decks' },
   { name: 'Study', href: '/study' },
   { name: 'Sessions', href: '/study-sessions' },
-  { name: 'Chat', href: '/chat' },
+  { name: 'Copy', href: '/chat' },
 ];
 
 export function Navbar() {

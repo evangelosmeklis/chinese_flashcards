@@ -284,4 +284,12 @@ export async function sendChatMessage(data: {
     body: JSON.stringify(data),
   });
   return handleResponse<{response: string}>(response);
+}
+
+/**
+ * Get flashcards for a specific deck
+ */
+export async function getFlashcardsByDeckId(deckId: string) {
+  const response = await fetch(`/api/decks/${deckId}/flashcards`);
+  return handleResponse<any[]>(response);
 } 
