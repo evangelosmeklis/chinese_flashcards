@@ -20,8 +20,9 @@ model Flashcard {
   pinyin    String
   meaning   String
 
-  tags  Tag[]
-  decks Deck[]
+  tags         Tag[]
+  decks        Deck[]
+  reviseStreak ReviseCardStreak?
 }
 
 model Tag {
@@ -53,4 +54,12 @@ model StudySession {
   incorrect Int @default(0)
 
   studyMode String // "normal", "reverse", "meaningOnly"
+}
+
+model ReviseCardStreak {
+  id          String    @id @default(cuid())
+  flashcardId String    @unique
+  flashcard   Flashcard @relation(fields: [flashcardId], references: [id], onDelete: Cascade)
+  streak      Int       @default(0)
+  updatedAt   DateTime  @updatedAt
 }

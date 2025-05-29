@@ -292,4 +292,32 @@ export async function sendChatMessage(data: {
 export async function getFlashcardsByDeckId(deckId: string) {
   const response = await fetch(`/api/decks/${deckId}/flashcards`);
   return handleResponse<any[]>(response);
+}
+
+/**
+ * Add incorrect cards to revise deck
+ */
+export async function addIncorrectCardsToReviseDeck(flashcardId: string) {
+  const response = await fetch(`/api/revise/add-card`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ flashcardId }),
+  });
+  return handleResponse<any>(response);
+}
+
+/**
+ * Update streak for revise card and remove if needed
+ */
+export async function updateReviseCardStreak(flashcardId: string, correct: boolean) {
+  const response = await fetch(`/api/revise/update-streak`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ flashcardId, correct }),
+  });
+  return handleResponse<any>(response);
 } 

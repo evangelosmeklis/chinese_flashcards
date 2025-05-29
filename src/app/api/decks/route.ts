@@ -2,11 +2,19 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
 // GET /api/decks - Get all decks
-export async function GET() {
+export async function GET(request: NextRequest) {
   console.log('GET /api/decks - Handler called');
   try {
     console.log('GET /api/decks - Attempting to query database');
+    
+    // Check for name filter
+    const url = new URL(request.url);
+    const nameFilter = url.searchParams.get('name');
+    
+    const where = nameFilter ? { name: nameFilter } : {};
+    
     const decks = await db.deck.findMany({
+      where,
       include: {
         flashcards: {
           select: {

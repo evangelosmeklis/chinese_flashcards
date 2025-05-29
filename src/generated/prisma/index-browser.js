@@ -150,6 +150,13 @@ exports.Prisma.StudySessionScalarFieldEnum = {
   studyMode: 'studyMode'
 };
 
+exports.Prisma.ReviseCardStreakScalarFieldEnum = {
+  id: 'id',
+  flashcardId: 'flashcardId',
+  streak: 'streak',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -165,7 +172,8 @@ exports.Prisma.ModelName = {
   Flashcard: 'Flashcard',
   Tag: 'Tag',
   Deck: 'Deck',
-  StudySession: 'StudySession'
+  StudySession: 'StudySession',
+  ReviseCardStreak: 'ReviseCardStreak'
 };
 
 /**

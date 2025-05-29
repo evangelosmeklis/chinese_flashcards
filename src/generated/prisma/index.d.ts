@@ -33,6 +33,11 @@ export type Deck = $Result.DefaultSelection<Prisma.$DeckPayload>
  * 
  */
 export type StudySession = $Result.DefaultSelection<Prisma.$StudySessionPayload>
+/**
+ * Model ReviseCardStreak
+ * 
+ */
+export type ReviseCardStreak = $Result.DefaultSelection<Prisma.$ReviseCardStreakPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -198,6 +203,16 @@ export class PrismaClient<
     * ```
     */
   get studySession(): Prisma.StudySessionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.reviseCardStreak`: Exposes CRUD operations for the **ReviseCardStreak** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ReviseCardStreaks
+    * const reviseCardStreaks = await prisma.reviseCardStreak.findMany()
+    * ```
+    */
+  get reviseCardStreak(): Prisma.ReviseCardStreakDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -641,7 +656,8 @@ export namespace Prisma {
     Flashcard: 'Flashcard',
     Tag: 'Tag',
     Deck: 'Deck',
-    StudySession: 'StudySession'
+    StudySession: 'StudySession',
+    ReviseCardStreak: 'ReviseCardStreak'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -660,7 +676,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "flashcard" | "tag" | "deck" | "studySession"
+      modelProps: "flashcard" | "tag" | "deck" | "studySession" | "reviseCardStreak"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -960,6 +976,80 @@ export namespace Prisma {
           }
         }
       }
+      ReviseCardStreak: {
+        payload: Prisma.$ReviseCardStreakPayload<ExtArgs>
+        fields: Prisma.ReviseCardStreakFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ReviseCardStreakFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviseCardStreakPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ReviseCardStreakFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviseCardStreakPayload>
+          }
+          findFirst: {
+            args: Prisma.ReviseCardStreakFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviseCardStreakPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ReviseCardStreakFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviseCardStreakPayload>
+          }
+          findMany: {
+            args: Prisma.ReviseCardStreakFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviseCardStreakPayload>[]
+          }
+          create: {
+            args: Prisma.ReviseCardStreakCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviseCardStreakPayload>
+          }
+          createMany: {
+            args: Prisma.ReviseCardStreakCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ReviseCardStreakCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviseCardStreakPayload>[]
+          }
+          delete: {
+            args: Prisma.ReviseCardStreakDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviseCardStreakPayload>
+          }
+          update: {
+            args: Prisma.ReviseCardStreakUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviseCardStreakPayload>
+          }
+          deleteMany: {
+            args: Prisma.ReviseCardStreakDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ReviseCardStreakUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ReviseCardStreakUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviseCardStreakPayload>[]
+          }
+          upsert: {
+            args: Prisma.ReviseCardStreakUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ReviseCardStreakPayload>
+          }
+          aggregate: {
+            args: Prisma.ReviseCardStreakAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateReviseCardStreak>
+          }
+          groupBy: {
+            args: Prisma.ReviseCardStreakGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ReviseCardStreakGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ReviseCardStreakCountArgs<ExtArgs>
+            result: $Utils.Optional<ReviseCardStreakCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1048,6 +1138,7 @@ export namespace Prisma {
     tag?: TagOmit
     deck?: DeckOmit
     studySession?: StudySessionOmit
+    reviseCardStreak?: ReviseCardStreakOmit
   }
 
   /* Types for Logging */
@@ -1426,6 +1517,7 @@ export namespace Prisma {
     meaning?: boolean
     tags?: boolean | Flashcard$tagsArgs<ExtArgs>
     decks?: boolean | Flashcard$decksArgs<ExtArgs>
+    reviseStreak?: boolean | Flashcard$reviseStreakArgs<ExtArgs>
     _count?: boolean | FlashcardCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["flashcard"]>
 
@@ -1460,6 +1552,7 @@ export namespace Prisma {
   export type FlashcardInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     tags?: boolean | Flashcard$tagsArgs<ExtArgs>
     decks?: boolean | Flashcard$decksArgs<ExtArgs>
+    reviseStreak?: boolean | Flashcard$reviseStreakArgs<ExtArgs>
     _count?: boolean | FlashcardCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type FlashcardIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1470,6 +1563,7 @@ export namespace Prisma {
     objects: {
       tags: Prisma.$TagPayload<ExtArgs>[]
       decks: Prisma.$DeckPayload<ExtArgs>[]
+      reviseStreak: Prisma.$ReviseCardStreakPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -1874,6 +1968,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     tags<T extends Flashcard$tagsArgs<ExtArgs> = {}>(args?: Subset<T, Flashcard$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     decks<T extends Flashcard$decksArgs<ExtArgs> = {}>(args?: Subset<T, Flashcard$decksArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$DeckPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    reviseStreak<T extends Flashcard$reviseStreakArgs<ExtArgs> = {}>(args?: Subset<T, Flashcard$reviseStreakArgs<ExtArgs>>): Prisma__ReviseCardStreakClient<$Result.GetResult<Prisma.$ReviseCardStreakPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2340,6 +2435,25 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: DeckScalarFieldEnum | DeckScalarFieldEnum[]
+  }
+
+  /**
+   * Flashcard.reviseStreak
+   */
+  export type Flashcard$reviseStreakArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakInclude<ExtArgs> | null
+    where?: ReviseCardStreakWhereInput
   }
 
   /**
@@ -5620,6 +5734,1083 @@ export namespace Prisma {
 
 
   /**
+   * Model ReviseCardStreak
+   */
+
+  export type AggregateReviseCardStreak = {
+    _count: ReviseCardStreakCountAggregateOutputType | null
+    _avg: ReviseCardStreakAvgAggregateOutputType | null
+    _sum: ReviseCardStreakSumAggregateOutputType | null
+    _min: ReviseCardStreakMinAggregateOutputType | null
+    _max: ReviseCardStreakMaxAggregateOutputType | null
+  }
+
+  export type ReviseCardStreakAvgAggregateOutputType = {
+    streak: number | null
+  }
+
+  export type ReviseCardStreakSumAggregateOutputType = {
+    streak: number | null
+  }
+
+  export type ReviseCardStreakMinAggregateOutputType = {
+    id: string | null
+    flashcardId: string | null
+    streak: number | null
+    updatedAt: Date | null
+  }
+
+  export type ReviseCardStreakMaxAggregateOutputType = {
+    id: string | null
+    flashcardId: string | null
+    streak: number | null
+    updatedAt: Date | null
+  }
+
+  export type ReviseCardStreakCountAggregateOutputType = {
+    id: number
+    flashcardId: number
+    streak: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ReviseCardStreakAvgAggregateInputType = {
+    streak?: true
+  }
+
+  export type ReviseCardStreakSumAggregateInputType = {
+    streak?: true
+  }
+
+  export type ReviseCardStreakMinAggregateInputType = {
+    id?: true
+    flashcardId?: true
+    streak?: true
+    updatedAt?: true
+  }
+
+  export type ReviseCardStreakMaxAggregateInputType = {
+    id?: true
+    flashcardId?: true
+    streak?: true
+    updatedAt?: true
+  }
+
+  export type ReviseCardStreakCountAggregateInputType = {
+    id?: true
+    flashcardId?: true
+    streak?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ReviseCardStreakAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReviseCardStreak to aggregate.
+     */
+    where?: ReviseCardStreakWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReviseCardStreaks to fetch.
+     */
+    orderBy?: ReviseCardStreakOrderByWithRelationInput | ReviseCardStreakOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ReviseCardStreakWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReviseCardStreaks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReviseCardStreaks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ReviseCardStreaks
+    **/
+    _count?: true | ReviseCardStreakCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ReviseCardStreakAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ReviseCardStreakSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ReviseCardStreakMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ReviseCardStreakMaxAggregateInputType
+  }
+
+  export type GetReviseCardStreakAggregateType<T extends ReviseCardStreakAggregateArgs> = {
+        [P in keyof T & keyof AggregateReviseCardStreak]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateReviseCardStreak[P]>
+      : GetScalarType<T[P], AggregateReviseCardStreak[P]>
+  }
+
+
+
+
+  export type ReviseCardStreakGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ReviseCardStreakWhereInput
+    orderBy?: ReviseCardStreakOrderByWithAggregationInput | ReviseCardStreakOrderByWithAggregationInput[]
+    by: ReviseCardStreakScalarFieldEnum[] | ReviseCardStreakScalarFieldEnum
+    having?: ReviseCardStreakScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ReviseCardStreakCountAggregateInputType | true
+    _avg?: ReviseCardStreakAvgAggregateInputType
+    _sum?: ReviseCardStreakSumAggregateInputType
+    _min?: ReviseCardStreakMinAggregateInputType
+    _max?: ReviseCardStreakMaxAggregateInputType
+  }
+
+  export type ReviseCardStreakGroupByOutputType = {
+    id: string
+    flashcardId: string
+    streak: number
+    updatedAt: Date
+    _count: ReviseCardStreakCountAggregateOutputType | null
+    _avg: ReviseCardStreakAvgAggregateOutputType | null
+    _sum: ReviseCardStreakSumAggregateOutputType | null
+    _min: ReviseCardStreakMinAggregateOutputType | null
+    _max: ReviseCardStreakMaxAggregateOutputType | null
+  }
+
+  type GetReviseCardStreakGroupByPayload<T extends ReviseCardStreakGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ReviseCardStreakGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ReviseCardStreakGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ReviseCardStreakGroupByOutputType[P]>
+            : GetScalarType<T[P], ReviseCardStreakGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ReviseCardStreakSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flashcardId?: boolean
+    streak?: boolean
+    updatedAt?: boolean
+    flashcard?: boolean | FlashcardDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reviseCardStreak"]>
+
+  export type ReviseCardStreakSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flashcardId?: boolean
+    streak?: boolean
+    updatedAt?: boolean
+    flashcard?: boolean | FlashcardDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reviseCardStreak"]>
+
+  export type ReviseCardStreakSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    flashcardId?: boolean
+    streak?: boolean
+    updatedAt?: boolean
+    flashcard?: boolean | FlashcardDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["reviseCardStreak"]>
+
+  export type ReviseCardStreakSelectScalar = {
+    id?: boolean
+    flashcardId?: boolean
+    streak?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ReviseCardStreakOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "flashcardId" | "streak" | "updatedAt", ExtArgs["result"]["reviseCardStreak"]>
+  export type ReviseCardStreakInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flashcard?: boolean | FlashcardDefaultArgs<ExtArgs>
+  }
+  export type ReviseCardStreakIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flashcard?: boolean | FlashcardDefaultArgs<ExtArgs>
+  }
+  export type ReviseCardStreakIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    flashcard?: boolean | FlashcardDefaultArgs<ExtArgs>
+  }
+
+  export type $ReviseCardStreakPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ReviseCardStreak"
+    objects: {
+      flashcard: Prisma.$FlashcardPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      flashcardId: string
+      streak: number
+      updatedAt: Date
+    }, ExtArgs["result"]["reviseCardStreak"]>
+    composites: {}
+  }
+
+  type ReviseCardStreakGetPayload<S extends boolean | null | undefined | ReviseCardStreakDefaultArgs> = $Result.GetResult<Prisma.$ReviseCardStreakPayload, S>
+
+  type ReviseCardStreakCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ReviseCardStreakFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ReviseCardStreakCountAggregateInputType | true
+    }
+
+  export interface ReviseCardStreakDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ReviseCardStreak'], meta: { name: 'ReviseCardStreak' } }
+    /**
+     * Find zero or one ReviseCardStreak that matches the filter.
+     * @param {ReviseCardStreakFindUniqueArgs} args - Arguments to find a ReviseCardStreak
+     * @example
+     * // Get one ReviseCardStreak
+     * const reviseCardStreak = await prisma.reviseCardStreak.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ReviseCardStreakFindUniqueArgs>(args: SelectSubset<T, ReviseCardStreakFindUniqueArgs<ExtArgs>>): Prisma__ReviseCardStreakClient<$Result.GetResult<Prisma.$ReviseCardStreakPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ReviseCardStreak that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ReviseCardStreakFindUniqueOrThrowArgs} args - Arguments to find a ReviseCardStreak
+     * @example
+     * // Get one ReviseCardStreak
+     * const reviseCardStreak = await prisma.reviseCardStreak.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ReviseCardStreakFindUniqueOrThrowArgs>(args: SelectSubset<T, ReviseCardStreakFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ReviseCardStreakClient<$Result.GetResult<Prisma.$ReviseCardStreakPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReviseCardStreak that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviseCardStreakFindFirstArgs} args - Arguments to find a ReviseCardStreak
+     * @example
+     * // Get one ReviseCardStreak
+     * const reviseCardStreak = await prisma.reviseCardStreak.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ReviseCardStreakFindFirstArgs>(args?: SelectSubset<T, ReviseCardStreakFindFirstArgs<ExtArgs>>): Prisma__ReviseCardStreakClient<$Result.GetResult<Prisma.$ReviseCardStreakPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ReviseCardStreak that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviseCardStreakFindFirstOrThrowArgs} args - Arguments to find a ReviseCardStreak
+     * @example
+     * // Get one ReviseCardStreak
+     * const reviseCardStreak = await prisma.reviseCardStreak.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ReviseCardStreakFindFirstOrThrowArgs>(args?: SelectSubset<T, ReviseCardStreakFindFirstOrThrowArgs<ExtArgs>>): Prisma__ReviseCardStreakClient<$Result.GetResult<Prisma.$ReviseCardStreakPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ReviseCardStreaks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviseCardStreakFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ReviseCardStreaks
+     * const reviseCardStreaks = await prisma.reviseCardStreak.findMany()
+     * 
+     * // Get first 10 ReviseCardStreaks
+     * const reviseCardStreaks = await prisma.reviseCardStreak.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const reviseCardStreakWithIdOnly = await prisma.reviseCardStreak.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ReviseCardStreakFindManyArgs>(args?: SelectSubset<T, ReviseCardStreakFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviseCardStreakPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ReviseCardStreak.
+     * @param {ReviseCardStreakCreateArgs} args - Arguments to create a ReviseCardStreak.
+     * @example
+     * // Create one ReviseCardStreak
+     * const ReviseCardStreak = await prisma.reviseCardStreak.create({
+     *   data: {
+     *     // ... data to create a ReviseCardStreak
+     *   }
+     * })
+     * 
+     */
+    create<T extends ReviseCardStreakCreateArgs>(args: SelectSubset<T, ReviseCardStreakCreateArgs<ExtArgs>>): Prisma__ReviseCardStreakClient<$Result.GetResult<Prisma.$ReviseCardStreakPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ReviseCardStreaks.
+     * @param {ReviseCardStreakCreateManyArgs} args - Arguments to create many ReviseCardStreaks.
+     * @example
+     * // Create many ReviseCardStreaks
+     * const reviseCardStreak = await prisma.reviseCardStreak.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ReviseCardStreakCreateManyArgs>(args?: SelectSubset<T, ReviseCardStreakCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ReviseCardStreaks and returns the data saved in the database.
+     * @param {ReviseCardStreakCreateManyAndReturnArgs} args - Arguments to create many ReviseCardStreaks.
+     * @example
+     * // Create many ReviseCardStreaks
+     * const reviseCardStreak = await prisma.reviseCardStreak.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ReviseCardStreaks and only return the `id`
+     * const reviseCardStreakWithIdOnly = await prisma.reviseCardStreak.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ReviseCardStreakCreateManyAndReturnArgs>(args?: SelectSubset<T, ReviseCardStreakCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviseCardStreakPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ReviseCardStreak.
+     * @param {ReviseCardStreakDeleteArgs} args - Arguments to delete one ReviseCardStreak.
+     * @example
+     * // Delete one ReviseCardStreak
+     * const ReviseCardStreak = await prisma.reviseCardStreak.delete({
+     *   where: {
+     *     // ... filter to delete one ReviseCardStreak
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ReviseCardStreakDeleteArgs>(args: SelectSubset<T, ReviseCardStreakDeleteArgs<ExtArgs>>): Prisma__ReviseCardStreakClient<$Result.GetResult<Prisma.$ReviseCardStreakPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ReviseCardStreak.
+     * @param {ReviseCardStreakUpdateArgs} args - Arguments to update one ReviseCardStreak.
+     * @example
+     * // Update one ReviseCardStreak
+     * const reviseCardStreak = await prisma.reviseCardStreak.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ReviseCardStreakUpdateArgs>(args: SelectSubset<T, ReviseCardStreakUpdateArgs<ExtArgs>>): Prisma__ReviseCardStreakClient<$Result.GetResult<Prisma.$ReviseCardStreakPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ReviseCardStreaks.
+     * @param {ReviseCardStreakDeleteManyArgs} args - Arguments to filter ReviseCardStreaks to delete.
+     * @example
+     * // Delete a few ReviseCardStreaks
+     * const { count } = await prisma.reviseCardStreak.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ReviseCardStreakDeleteManyArgs>(args?: SelectSubset<T, ReviseCardStreakDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReviseCardStreaks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviseCardStreakUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ReviseCardStreaks
+     * const reviseCardStreak = await prisma.reviseCardStreak.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ReviseCardStreakUpdateManyArgs>(args: SelectSubset<T, ReviseCardStreakUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ReviseCardStreaks and returns the data updated in the database.
+     * @param {ReviseCardStreakUpdateManyAndReturnArgs} args - Arguments to update many ReviseCardStreaks.
+     * @example
+     * // Update many ReviseCardStreaks
+     * const reviseCardStreak = await prisma.reviseCardStreak.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ReviseCardStreaks and only return the `id`
+     * const reviseCardStreakWithIdOnly = await prisma.reviseCardStreak.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ReviseCardStreakUpdateManyAndReturnArgs>(args: SelectSubset<T, ReviseCardStreakUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ReviseCardStreakPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ReviseCardStreak.
+     * @param {ReviseCardStreakUpsertArgs} args - Arguments to update or create a ReviseCardStreak.
+     * @example
+     * // Update or create a ReviseCardStreak
+     * const reviseCardStreak = await prisma.reviseCardStreak.upsert({
+     *   create: {
+     *     // ... data to create a ReviseCardStreak
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ReviseCardStreak we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ReviseCardStreakUpsertArgs>(args: SelectSubset<T, ReviseCardStreakUpsertArgs<ExtArgs>>): Prisma__ReviseCardStreakClient<$Result.GetResult<Prisma.$ReviseCardStreakPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ReviseCardStreaks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviseCardStreakCountArgs} args - Arguments to filter ReviseCardStreaks to count.
+     * @example
+     * // Count the number of ReviseCardStreaks
+     * const count = await prisma.reviseCardStreak.count({
+     *   where: {
+     *     // ... the filter for the ReviseCardStreaks we want to count
+     *   }
+     * })
+    **/
+    count<T extends ReviseCardStreakCountArgs>(
+      args?: Subset<T, ReviseCardStreakCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ReviseCardStreakCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ReviseCardStreak.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviseCardStreakAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ReviseCardStreakAggregateArgs>(args: Subset<T, ReviseCardStreakAggregateArgs>): Prisma.PrismaPromise<GetReviseCardStreakAggregateType<T>>
+
+    /**
+     * Group by ReviseCardStreak.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ReviseCardStreakGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ReviseCardStreakGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ReviseCardStreakGroupByArgs['orderBy'] }
+        : { orderBy?: ReviseCardStreakGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ReviseCardStreakGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetReviseCardStreakGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ReviseCardStreak model
+   */
+  readonly fields: ReviseCardStreakFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ReviseCardStreak.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ReviseCardStreakClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    flashcard<T extends FlashcardDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FlashcardDefaultArgs<ExtArgs>>): Prisma__FlashcardClient<$Result.GetResult<Prisma.$FlashcardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ReviseCardStreak model
+   */
+  interface ReviseCardStreakFieldRefs {
+    readonly id: FieldRef<"ReviseCardStreak", 'String'>
+    readonly flashcardId: FieldRef<"ReviseCardStreak", 'String'>
+    readonly streak: FieldRef<"ReviseCardStreak", 'Int'>
+    readonly updatedAt: FieldRef<"ReviseCardStreak", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ReviseCardStreak findUnique
+   */
+  export type ReviseCardStreakFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakInclude<ExtArgs> | null
+    /**
+     * Filter, which ReviseCardStreak to fetch.
+     */
+    where: ReviseCardStreakWhereUniqueInput
+  }
+
+  /**
+   * ReviseCardStreak findUniqueOrThrow
+   */
+  export type ReviseCardStreakFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakInclude<ExtArgs> | null
+    /**
+     * Filter, which ReviseCardStreak to fetch.
+     */
+    where: ReviseCardStreakWhereUniqueInput
+  }
+
+  /**
+   * ReviseCardStreak findFirst
+   */
+  export type ReviseCardStreakFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakInclude<ExtArgs> | null
+    /**
+     * Filter, which ReviseCardStreak to fetch.
+     */
+    where?: ReviseCardStreakWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReviseCardStreaks to fetch.
+     */
+    orderBy?: ReviseCardStreakOrderByWithRelationInput | ReviseCardStreakOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReviseCardStreaks.
+     */
+    cursor?: ReviseCardStreakWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReviseCardStreaks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReviseCardStreaks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReviseCardStreaks.
+     */
+    distinct?: ReviseCardStreakScalarFieldEnum | ReviseCardStreakScalarFieldEnum[]
+  }
+
+  /**
+   * ReviseCardStreak findFirstOrThrow
+   */
+  export type ReviseCardStreakFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakInclude<ExtArgs> | null
+    /**
+     * Filter, which ReviseCardStreak to fetch.
+     */
+    where?: ReviseCardStreakWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReviseCardStreaks to fetch.
+     */
+    orderBy?: ReviseCardStreakOrderByWithRelationInput | ReviseCardStreakOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ReviseCardStreaks.
+     */
+    cursor?: ReviseCardStreakWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReviseCardStreaks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReviseCardStreaks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ReviseCardStreaks.
+     */
+    distinct?: ReviseCardStreakScalarFieldEnum | ReviseCardStreakScalarFieldEnum[]
+  }
+
+  /**
+   * ReviseCardStreak findMany
+   */
+  export type ReviseCardStreakFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakInclude<ExtArgs> | null
+    /**
+     * Filter, which ReviseCardStreaks to fetch.
+     */
+    where?: ReviseCardStreakWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ReviseCardStreaks to fetch.
+     */
+    orderBy?: ReviseCardStreakOrderByWithRelationInput | ReviseCardStreakOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ReviseCardStreaks.
+     */
+    cursor?: ReviseCardStreakWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ReviseCardStreaks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ReviseCardStreaks.
+     */
+    skip?: number
+    distinct?: ReviseCardStreakScalarFieldEnum | ReviseCardStreakScalarFieldEnum[]
+  }
+
+  /**
+   * ReviseCardStreak create
+   */
+  export type ReviseCardStreakCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ReviseCardStreak.
+     */
+    data: XOR<ReviseCardStreakCreateInput, ReviseCardStreakUncheckedCreateInput>
+  }
+
+  /**
+   * ReviseCardStreak createMany
+   */
+  export type ReviseCardStreakCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ReviseCardStreaks.
+     */
+    data: ReviseCardStreakCreateManyInput | ReviseCardStreakCreateManyInput[]
+  }
+
+  /**
+   * ReviseCardStreak createManyAndReturn
+   */
+  export type ReviseCardStreakCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * The data used to create many ReviseCardStreaks.
+     */
+    data: ReviseCardStreakCreateManyInput | ReviseCardStreakCreateManyInput[]
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReviseCardStreak update
+   */
+  export type ReviseCardStreakUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ReviseCardStreak.
+     */
+    data: XOR<ReviseCardStreakUpdateInput, ReviseCardStreakUncheckedUpdateInput>
+    /**
+     * Choose, which ReviseCardStreak to update.
+     */
+    where: ReviseCardStreakWhereUniqueInput
+  }
+
+  /**
+   * ReviseCardStreak updateMany
+   */
+  export type ReviseCardStreakUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ReviseCardStreaks.
+     */
+    data: XOR<ReviseCardStreakUpdateManyMutationInput, ReviseCardStreakUncheckedUpdateManyInput>
+    /**
+     * Filter which ReviseCardStreaks to update
+     */
+    where?: ReviseCardStreakWhereInput
+    /**
+     * Limit how many ReviseCardStreaks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReviseCardStreak updateManyAndReturn
+   */
+  export type ReviseCardStreakUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * The data used to update ReviseCardStreaks.
+     */
+    data: XOR<ReviseCardStreakUpdateManyMutationInput, ReviseCardStreakUncheckedUpdateManyInput>
+    /**
+     * Filter which ReviseCardStreaks to update
+     */
+    where?: ReviseCardStreakWhereInput
+    /**
+     * Limit how many ReviseCardStreaks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ReviseCardStreak upsert
+   */
+  export type ReviseCardStreakUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ReviseCardStreak to update in case it exists.
+     */
+    where: ReviseCardStreakWhereUniqueInput
+    /**
+     * In case the ReviseCardStreak found by the `where` argument doesn't exist, create a new ReviseCardStreak with this data.
+     */
+    create: XOR<ReviseCardStreakCreateInput, ReviseCardStreakUncheckedCreateInput>
+    /**
+     * In case the ReviseCardStreak was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ReviseCardStreakUpdateInput, ReviseCardStreakUncheckedUpdateInput>
+  }
+
+  /**
+   * ReviseCardStreak delete
+   */
+  export type ReviseCardStreakDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakInclude<ExtArgs> | null
+    /**
+     * Filter which ReviseCardStreak to delete.
+     */
+    where: ReviseCardStreakWhereUniqueInput
+  }
+
+  /**
+   * ReviseCardStreak deleteMany
+   */
+  export type ReviseCardStreakDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ReviseCardStreaks to delete
+     */
+    where?: ReviseCardStreakWhereInput
+    /**
+     * Limit how many ReviseCardStreaks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ReviseCardStreak without action
+   */
+  export type ReviseCardStreakDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ReviseCardStreak
+     */
+    select?: ReviseCardStreakSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ReviseCardStreak
+     */
+    omit?: ReviseCardStreakOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ReviseCardStreakInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -5673,6 +6864,16 @@ export namespace Prisma {
   };
 
   export type StudySessionScalarFieldEnum = (typeof StudySessionScalarFieldEnum)[keyof typeof StudySessionScalarFieldEnum]
+
+
+  export const ReviseCardStreakScalarFieldEnum: {
+    id: 'id',
+    flashcardId: 'flashcardId',
+    streak: 'streak',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ReviseCardStreakScalarFieldEnum = (typeof ReviseCardStreakScalarFieldEnum)[keyof typeof ReviseCardStreakScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -5739,6 +6940,7 @@ export namespace Prisma {
     meaning?: StringFilter<"Flashcard"> | string
     tags?: TagListRelationFilter
     decks?: DeckListRelationFilter
+    reviseStreak?: XOR<ReviseCardStreakNullableScalarRelationFilter, ReviseCardStreakWhereInput> | null
   }
 
   export type FlashcardOrderByWithRelationInput = {
@@ -5750,6 +6952,7 @@ export namespace Prisma {
     meaning?: SortOrder
     tags?: TagOrderByRelationAggregateInput
     decks?: DeckOrderByRelationAggregateInput
+    reviseStreak?: ReviseCardStreakOrderByWithRelationInput
   }
 
   export type FlashcardWhereUniqueInput = Prisma.AtLeast<{
@@ -5764,6 +6967,7 @@ export namespace Prisma {
     meaning?: StringFilter<"Flashcard"> | string
     tags?: TagListRelationFilter
     decks?: DeckListRelationFilter
+    reviseStreak?: XOR<ReviseCardStreakNullableScalarRelationFilter, ReviseCardStreakWhereInput> | null
   }, "id">
 
   export type FlashcardOrderByWithAggregationInput = {
@@ -5960,6 +7164,58 @@ export namespace Prisma {
     studyMode?: StringWithAggregatesFilter<"StudySession"> | string
   }
 
+  export type ReviseCardStreakWhereInput = {
+    AND?: ReviseCardStreakWhereInput | ReviseCardStreakWhereInput[]
+    OR?: ReviseCardStreakWhereInput[]
+    NOT?: ReviseCardStreakWhereInput | ReviseCardStreakWhereInput[]
+    id?: StringFilter<"ReviseCardStreak"> | string
+    flashcardId?: StringFilter<"ReviseCardStreak"> | string
+    streak?: IntFilter<"ReviseCardStreak"> | number
+    updatedAt?: DateTimeFilter<"ReviseCardStreak"> | Date | string
+    flashcard?: XOR<FlashcardScalarRelationFilter, FlashcardWhereInput>
+  }
+
+  export type ReviseCardStreakOrderByWithRelationInput = {
+    id?: SortOrder
+    flashcardId?: SortOrder
+    streak?: SortOrder
+    updatedAt?: SortOrder
+    flashcard?: FlashcardOrderByWithRelationInput
+  }
+
+  export type ReviseCardStreakWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    flashcardId?: string
+    AND?: ReviseCardStreakWhereInput | ReviseCardStreakWhereInput[]
+    OR?: ReviseCardStreakWhereInput[]
+    NOT?: ReviseCardStreakWhereInput | ReviseCardStreakWhereInput[]
+    streak?: IntFilter<"ReviseCardStreak"> | number
+    updatedAt?: DateTimeFilter<"ReviseCardStreak"> | Date | string
+    flashcard?: XOR<FlashcardScalarRelationFilter, FlashcardWhereInput>
+  }, "id" | "flashcardId">
+
+  export type ReviseCardStreakOrderByWithAggregationInput = {
+    id?: SortOrder
+    flashcardId?: SortOrder
+    streak?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ReviseCardStreakCountOrderByAggregateInput
+    _avg?: ReviseCardStreakAvgOrderByAggregateInput
+    _max?: ReviseCardStreakMaxOrderByAggregateInput
+    _min?: ReviseCardStreakMinOrderByAggregateInput
+    _sum?: ReviseCardStreakSumOrderByAggregateInput
+  }
+
+  export type ReviseCardStreakScalarWhereWithAggregatesInput = {
+    AND?: ReviseCardStreakScalarWhereWithAggregatesInput | ReviseCardStreakScalarWhereWithAggregatesInput[]
+    OR?: ReviseCardStreakScalarWhereWithAggregatesInput[]
+    NOT?: ReviseCardStreakScalarWhereWithAggregatesInput | ReviseCardStreakScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ReviseCardStreak"> | string
+    flashcardId?: StringWithAggregatesFilter<"ReviseCardStreak"> | string
+    streak?: IntWithAggregatesFilter<"ReviseCardStreak"> | number
+    updatedAt?: DateTimeWithAggregatesFilter<"ReviseCardStreak"> | Date | string
+  }
+
   export type FlashcardCreateInput = {
     id?: string
     createdAt?: Date | string
@@ -5969,6 +7225,7 @@ export namespace Prisma {
     meaning: string
     tags?: TagCreateNestedManyWithoutFlashcardsInput
     decks?: DeckCreateNestedManyWithoutFlashcardsInput
+    reviseStreak?: ReviseCardStreakCreateNestedOneWithoutFlashcardInput
   }
 
   export type FlashcardUncheckedCreateInput = {
@@ -5980,6 +7237,7 @@ export namespace Prisma {
     meaning: string
     tags?: TagUncheckedCreateNestedManyWithoutFlashcardsInput
     decks?: DeckUncheckedCreateNestedManyWithoutFlashcardsInput
+    reviseStreak?: ReviseCardStreakUncheckedCreateNestedOneWithoutFlashcardInput
   }
 
   export type FlashcardUpdateInput = {
@@ -5991,6 +7249,7 @@ export namespace Prisma {
     meaning?: StringFieldUpdateOperationsInput | string
     tags?: TagUpdateManyWithoutFlashcardsNestedInput
     decks?: DeckUpdateManyWithoutFlashcardsNestedInput
+    reviseStreak?: ReviseCardStreakUpdateOneWithoutFlashcardNestedInput
   }
 
   export type FlashcardUncheckedUpdateInput = {
@@ -6002,6 +7261,7 @@ export namespace Prisma {
     meaning?: StringFieldUpdateOperationsInput | string
     tags?: TagUncheckedUpdateManyWithoutFlashcardsNestedInput
     decks?: DeckUncheckedUpdateManyWithoutFlashcardsNestedInput
+    reviseStreak?: ReviseCardStreakUncheckedUpdateOneWithoutFlashcardNestedInput
   }
 
   export type FlashcardCreateManyInput = {
@@ -6210,6 +7470,54 @@ export namespace Prisma {
     studyMode?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ReviseCardStreakCreateInput = {
+    id?: string
+    streak?: number
+    updatedAt?: Date | string
+    flashcard: FlashcardCreateNestedOneWithoutReviseStreakInput
+  }
+
+  export type ReviseCardStreakUncheckedCreateInput = {
+    id?: string
+    flashcardId: string
+    streak?: number
+    updatedAt?: Date | string
+  }
+
+  export type ReviseCardStreakUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    streak?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    flashcard?: FlashcardUpdateOneRequiredWithoutReviseStreakNestedInput
+  }
+
+  export type ReviseCardStreakUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flashcardId?: StringFieldUpdateOperationsInput | string
+    streak?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviseCardStreakCreateManyInput = {
+    id?: string
+    flashcardId: string
+    streak?: number
+    updatedAt?: Date | string
+  }
+
+  export type ReviseCardStreakUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    streak?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviseCardStreakUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    flashcardId?: StringFieldUpdateOperationsInput | string
+    streak?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[]
@@ -6245,6 +7553,11 @@ export namespace Prisma {
     every?: DeckWhereInput
     some?: DeckWhereInput
     none?: DeckWhereInput
+  }
+
+  export type ReviseCardStreakNullableScalarRelationFilter = {
+    is?: ReviseCardStreakWhereInput | null
+    isNot?: ReviseCardStreakWhereInput | null
   }
 
   export type TagOrderByRelationAggregateInput = {
@@ -6508,6 +7821,40 @@ export namespace Prisma {
     _max?: NestedIntFilter<$PrismaModel>
   }
 
+  export type FlashcardScalarRelationFilter = {
+    is?: FlashcardWhereInput
+    isNot?: FlashcardWhereInput
+  }
+
+  export type ReviseCardStreakCountOrderByAggregateInput = {
+    id?: SortOrder
+    flashcardId?: SortOrder
+    streak?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReviseCardStreakAvgOrderByAggregateInput = {
+    streak?: SortOrder
+  }
+
+  export type ReviseCardStreakMaxOrderByAggregateInput = {
+    id?: SortOrder
+    flashcardId?: SortOrder
+    streak?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReviseCardStreakMinOrderByAggregateInput = {
+    id?: SortOrder
+    flashcardId?: SortOrder
+    streak?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ReviseCardStreakSumOrderByAggregateInput = {
+    streak?: SortOrder
+  }
+
   export type TagCreateNestedManyWithoutFlashcardsInput = {
     create?: XOR<TagCreateWithoutFlashcardsInput, TagUncheckedCreateWithoutFlashcardsInput> | TagCreateWithoutFlashcardsInput[] | TagUncheckedCreateWithoutFlashcardsInput[]
     connectOrCreate?: TagCreateOrConnectWithoutFlashcardsInput | TagCreateOrConnectWithoutFlashcardsInput[]
@@ -6520,6 +7867,12 @@ export namespace Prisma {
     connect?: DeckWhereUniqueInput | DeckWhereUniqueInput[]
   }
 
+  export type ReviseCardStreakCreateNestedOneWithoutFlashcardInput = {
+    create?: XOR<ReviseCardStreakCreateWithoutFlashcardInput, ReviseCardStreakUncheckedCreateWithoutFlashcardInput>
+    connectOrCreate?: ReviseCardStreakCreateOrConnectWithoutFlashcardInput
+    connect?: ReviseCardStreakWhereUniqueInput
+  }
+
   export type TagUncheckedCreateNestedManyWithoutFlashcardsInput = {
     create?: XOR<TagCreateWithoutFlashcardsInput, TagUncheckedCreateWithoutFlashcardsInput> | TagCreateWithoutFlashcardsInput[] | TagUncheckedCreateWithoutFlashcardsInput[]
     connectOrCreate?: TagCreateOrConnectWithoutFlashcardsInput | TagCreateOrConnectWithoutFlashcardsInput[]
@@ -6530,6 +7883,12 @@ export namespace Prisma {
     create?: XOR<DeckCreateWithoutFlashcardsInput, DeckUncheckedCreateWithoutFlashcardsInput> | DeckCreateWithoutFlashcardsInput[] | DeckUncheckedCreateWithoutFlashcardsInput[]
     connectOrCreate?: DeckCreateOrConnectWithoutFlashcardsInput | DeckCreateOrConnectWithoutFlashcardsInput[]
     connect?: DeckWhereUniqueInput | DeckWhereUniqueInput[]
+  }
+
+  export type ReviseCardStreakUncheckedCreateNestedOneWithoutFlashcardInput = {
+    create?: XOR<ReviseCardStreakCreateWithoutFlashcardInput, ReviseCardStreakUncheckedCreateWithoutFlashcardInput>
+    connectOrCreate?: ReviseCardStreakCreateOrConnectWithoutFlashcardInput
+    connect?: ReviseCardStreakWhereUniqueInput
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -6566,6 +7925,16 @@ export namespace Prisma {
     deleteMany?: DeckScalarWhereInput | DeckScalarWhereInput[]
   }
 
+  export type ReviseCardStreakUpdateOneWithoutFlashcardNestedInput = {
+    create?: XOR<ReviseCardStreakCreateWithoutFlashcardInput, ReviseCardStreakUncheckedCreateWithoutFlashcardInput>
+    connectOrCreate?: ReviseCardStreakCreateOrConnectWithoutFlashcardInput
+    upsert?: ReviseCardStreakUpsertWithoutFlashcardInput
+    disconnect?: ReviseCardStreakWhereInput | boolean
+    delete?: ReviseCardStreakWhereInput | boolean
+    connect?: ReviseCardStreakWhereUniqueInput
+    update?: XOR<XOR<ReviseCardStreakUpdateToOneWithWhereWithoutFlashcardInput, ReviseCardStreakUpdateWithoutFlashcardInput>, ReviseCardStreakUncheckedUpdateWithoutFlashcardInput>
+  }
+
   export type TagUncheckedUpdateManyWithoutFlashcardsNestedInput = {
     create?: XOR<TagCreateWithoutFlashcardsInput, TagUncheckedCreateWithoutFlashcardsInput> | TagCreateWithoutFlashcardsInput[] | TagUncheckedCreateWithoutFlashcardsInput[]
     connectOrCreate?: TagCreateOrConnectWithoutFlashcardsInput | TagCreateOrConnectWithoutFlashcardsInput[]
@@ -6590,6 +7959,16 @@ export namespace Prisma {
     update?: DeckUpdateWithWhereUniqueWithoutFlashcardsInput | DeckUpdateWithWhereUniqueWithoutFlashcardsInput[]
     updateMany?: DeckUpdateManyWithWhereWithoutFlashcardsInput | DeckUpdateManyWithWhereWithoutFlashcardsInput[]
     deleteMany?: DeckScalarWhereInput | DeckScalarWhereInput[]
+  }
+
+  export type ReviseCardStreakUncheckedUpdateOneWithoutFlashcardNestedInput = {
+    create?: XOR<ReviseCardStreakCreateWithoutFlashcardInput, ReviseCardStreakUncheckedCreateWithoutFlashcardInput>
+    connectOrCreate?: ReviseCardStreakCreateOrConnectWithoutFlashcardInput
+    upsert?: ReviseCardStreakUpsertWithoutFlashcardInput
+    disconnect?: ReviseCardStreakWhereInput | boolean
+    delete?: ReviseCardStreakWhereInput | boolean
+    connect?: ReviseCardStreakWhereUniqueInput
+    update?: XOR<XOR<ReviseCardStreakUpdateToOneWithWhereWithoutFlashcardInput, ReviseCardStreakUpdateWithoutFlashcardInput>, ReviseCardStreakUncheckedUpdateWithoutFlashcardInput>
   }
 
   export type FlashcardCreateNestedManyWithoutTagsInput = {
@@ -6738,6 +8117,20 @@ export namespace Prisma {
     upsert?: DeckUpsertWithoutStudySessionsInput
     connect?: DeckWhereUniqueInput
     update?: XOR<XOR<DeckUpdateToOneWithWhereWithoutStudySessionsInput, DeckUpdateWithoutStudySessionsInput>, DeckUncheckedUpdateWithoutStudySessionsInput>
+  }
+
+  export type FlashcardCreateNestedOneWithoutReviseStreakInput = {
+    create?: XOR<FlashcardCreateWithoutReviseStreakInput, FlashcardUncheckedCreateWithoutReviseStreakInput>
+    connectOrCreate?: FlashcardCreateOrConnectWithoutReviseStreakInput
+    connect?: FlashcardWhereUniqueInput
+  }
+
+  export type FlashcardUpdateOneRequiredWithoutReviseStreakNestedInput = {
+    create?: XOR<FlashcardCreateWithoutReviseStreakInput, FlashcardUncheckedCreateWithoutReviseStreakInput>
+    connectOrCreate?: FlashcardCreateOrConnectWithoutReviseStreakInput
+    upsert?: FlashcardUpsertWithoutReviseStreakInput
+    connect?: FlashcardWhereUniqueInput
+    update?: XOR<XOR<FlashcardUpdateToOneWithWhereWithoutReviseStreakInput, FlashcardUpdateWithoutReviseStreakInput>, FlashcardUncheckedUpdateWithoutReviseStreakInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -6941,6 +8334,23 @@ export namespace Prisma {
     create: XOR<DeckCreateWithoutFlashcardsInput, DeckUncheckedCreateWithoutFlashcardsInput>
   }
 
+  export type ReviseCardStreakCreateWithoutFlashcardInput = {
+    id?: string
+    streak?: number
+    updatedAt?: Date | string
+  }
+
+  export type ReviseCardStreakUncheckedCreateWithoutFlashcardInput = {
+    id?: string
+    streak?: number
+    updatedAt?: Date | string
+  }
+
+  export type ReviseCardStreakCreateOrConnectWithoutFlashcardInput = {
+    where: ReviseCardStreakWhereUniqueInput
+    create: XOR<ReviseCardStreakCreateWithoutFlashcardInput, ReviseCardStreakUncheckedCreateWithoutFlashcardInput>
+  }
+
   export type TagUpsertWithWhereUniqueWithoutFlashcardsInput = {
     where: TagWhereUniqueInput
     update: XOR<TagUpdateWithoutFlashcardsInput, TagUncheckedUpdateWithoutFlashcardsInput>
@@ -6993,6 +8403,29 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Deck"> | Date | string
   }
 
+  export type ReviseCardStreakUpsertWithoutFlashcardInput = {
+    update: XOR<ReviseCardStreakUpdateWithoutFlashcardInput, ReviseCardStreakUncheckedUpdateWithoutFlashcardInput>
+    create: XOR<ReviseCardStreakCreateWithoutFlashcardInput, ReviseCardStreakUncheckedCreateWithoutFlashcardInput>
+    where?: ReviseCardStreakWhereInput
+  }
+
+  export type ReviseCardStreakUpdateToOneWithWhereWithoutFlashcardInput = {
+    where?: ReviseCardStreakWhereInput
+    data: XOR<ReviseCardStreakUpdateWithoutFlashcardInput, ReviseCardStreakUncheckedUpdateWithoutFlashcardInput>
+  }
+
+  export type ReviseCardStreakUpdateWithoutFlashcardInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    streak?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ReviseCardStreakUncheckedUpdateWithoutFlashcardInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    streak?: IntFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type FlashcardCreateWithoutTagsInput = {
     id?: string
     createdAt?: Date | string
@@ -7001,6 +8434,7 @@ export namespace Prisma {
     pinyin: string
     meaning: string
     decks?: DeckCreateNestedManyWithoutFlashcardsInput
+    reviseStreak?: ReviseCardStreakCreateNestedOneWithoutFlashcardInput
   }
 
   export type FlashcardUncheckedCreateWithoutTagsInput = {
@@ -7011,6 +8445,7 @@ export namespace Prisma {
     pinyin: string
     meaning: string
     decks?: DeckUncheckedCreateNestedManyWithoutFlashcardsInput
+    reviseStreak?: ReviseCardStreakUncheckedCreateNestedOneWithoutFlashcardInput
   }
 
   export type FlashcardCreateOrConnectWithoutTagsInput = {
@@ -7054,6 +8489,7 @@ export namespace Prisma {
     pinyin: string
     meaning: string
     tags?: TagCreateNestedManyWithoutFlashcardsInput
+    reviseStreak?: ReviseCardStreakCreateNestedOneWithoutFlashcardInput
   }
 
   export type FlashcardUncheckedCreateWithoutDecksInput = {
@@ -7064,6 +8500,7 @@ export namespace Prisma {
     pinyin: string
     meaning: string
     tags?: TagUncheckedCreateNestedManyWithoutFlashcardsInput
+    reviseStreak?: ReviseCardStreakUncheckedCreateNestedOneWithoutFlashcardInput
   }
 
   export type FlashcardCreateOrConnectWithoutDecksInput = {
@@ -7195,6 +8632,66 @@ export namespace Prisma {
     flashcards?: FlashcardUncheckedUpdateManyWithoutDecksNestedInput
   }
 
+  export type FlashcardCreateWithoutReviseStreakInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    character: string
+    pinyin: string
+    meaning: string
+    tags?: TagCreateNestedManyWithoutFlashcardsInput
+    decks?: DeckCreateNestedManyWithoutFlashcardsInput
+  }
+
+  export type FlashcardUncheckedCreateWithoutReviseStreakInput = {
+    id?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    character: string
+    pinyin: string
+    meaning: string
+    tags?: TagUncheckedCreateNestedManyWithoutFlashcardsInput
+    decks?: DeckUncheckedCreateNestedManyWithoutFlashcardsInput
+  }
+
+  export type FlashcardCreateOrConnectWithoutReviseStreakInput = {
+    where: FlashcardWhereUniqueInput
+    create: XOR<FlashcardCreateWithoutReviseStreakInput, FlashcardUncheckedCreateWithoutReviseStreakInput>
+  }
+
+  export type FlashcardUpsertWithoutReviseStreakInput = {
+    update: XOR<FlashcardUpdateWithoutReviseStreakInput, FlashcardUncheckedUpdateWithoutReviseStreakInput>
+    create: XOR<FlashcardCreateWithoutReviseStreakInput, FlashcardUncheckedCreateWithoutReviseStreakInput>
+    where?: FlashcardWhereInput
+  }
+
+  export type FlashcardUpdateToOneWithWhereWithoutReviseStreakInput = {
+    where?: FlashcardWhereInput
+    data: XOR<FlashcardUpdateWithoutReviseStreakInput, FlashcardUncheckedUpdateWithoutReviseStreakInput>
+  }
+
+  export type FlashcardUpdateWithoutReviseStreakInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    character?: StringFieldUpdateOperationsInput | string
+    pinyin?: StringFieldUpdateOperationsInput | string
+    meaning?: StringFieldUpdateOperationsInput | string
+    tags?: TagUpdateManyWithoutFlashcardsNestedInput
+    decks?: DeckUpdateManyWithoutFlashcardsNestedInput
+  }
+
+  export type FlashcardUncheckedUpdateWithoutReviseStreakInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    character?: StringFieldUpdateOperationsInput | string
+    pinyin?: StringFieldUpdateOperationsInput | string
+    meaning?: StringFieldUpdateOperationsInput | string
+    tags?: TagUncheckedUpdateManyWithoutFlashcardsNestedInput
+    decks?: DeckUncheckedUpdateManyWithoutFlashcardsNestedInput
+  }
+
   export type TagUpdateWithoutFlashcardsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -7247,6 +8744,7 @@ export namespace Prisma {
     pinyin?: StringFieldUpdateOperationsInput | string
     meaning?: StringFieldUpdateOperationsInput | string
     decks?: DeckUpdateManyWithoutFlashcardsNestedInput
+    reviseStreak?: ReviseCardStreakUpdateOneWithoutFlashcardNestedInput
   }
 
   export type FlashcardUncheckedUpdateWithoutTagsInput = {
@@ -7257,6 +8755,7 @@ export namespace Prisma {
     pinyin?: StringFieldUpdateOperationsInput | string
     meaning?: StringFieldUpdateOperationsInput | string
     decks?: DeckUncheckedUpdateManyWithoutFlashcardsNestedInput
+    reviseStreak?: ReviseCardStreakUncheckedUpdateOneWithoutFlashcardNestedInput
   }
 
   export type FlashcardUncheckedUpdateManyWithoutTagsInput = {
@@ -7285,6 +8784,7 @@ export namespace Prisma {
     pinyin?: StringFieldUpdateOperationsInput | string
     meaning?: StringFieldUpdateOperationsInput | string
     tags?: TagUpdateManyWithoutFlashcardsNestedInput
+    reviseStreak?: ReviseCardStreakUpdateOneWithoutFlashcardNestedInput
   }
 
   export type FlashcardUncheckedUpdateWithoutDecksInput = {
@@ -7295,6 +8795,7 @@ export namespace Prisma {
     pinyin?: StringFieldUpdateOperationsInput | string
     meaning?: StringFieldUpdateOperationsInput | string
     tags?: TagUncheckedUpdateManyWithoutFlashcardsNestedInput
+    reviseStreak?: ReviseCardStreakUncheckedUpdateOneWithoutFlashcardNestedInput
   }
 
   export type FlashcardUncheckedUpdateManyWithoutDecksInput = {

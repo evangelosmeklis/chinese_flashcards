@@ -190,6 +190,7 @@ export function StudySession({ deck, flashcards, onComplete }: StudySessionProps
               meaning={shuffledCards[currentIndex].meaning}
               mode={studyMode}
               onResult={handleCardResult}
+              deckId={deck.id}
             />
           ) : null}
         </div>
